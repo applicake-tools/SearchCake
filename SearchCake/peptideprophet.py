@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 import os
 
-from toolscake.apps.tpp.searchengines.enzymes import enzymestr_to_engine
+from searchengines.enzymes import enzymestr_to_engine
 from applicake.base.app import WrappedApp
 from applicake.base.apputils import validation
 from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys, KeyHelp
+
 
 class PeptideProphetSequence(WrappedApp):
     """

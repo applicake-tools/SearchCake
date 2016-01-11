@@ -5,7 +5,7 @@ from applicake.base.app import WrappedApp
 from applicake.base.apputils import validation
 from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys, KeyHelp
-from toolscake.apps.tpp.fdr import get_iprob_for_fdr
+from fdr import get_iprob_for_fdr
 
 
 class ProteinProphet(WrappedApp):

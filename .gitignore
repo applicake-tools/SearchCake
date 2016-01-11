@@ -2,3 +2,5 @@
 .idea/
 applicake.egg-info/
 *.egg-info/
+build/
+dist/

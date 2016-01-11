@@ -13,11 +13,11 @@ from ruffus import *
 from applicake.apps.examples.a_pyecho import PythonEcho
 from applicake.apps.flow.merge import Merge
 from applicake.apps.flow.split import Split
-from toolscake.apps.tpp.interprophet import InterProphet
-from toolscake.apps.tpp.peptideprophet import PeptideProphetSequence
-from toolscake.apps.tpp.searchengines.comet import Comet
-from toolscake.apps.tpp.searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
-from toolscake.apps.tpp.searchengines.myrimatch import Myrimatch
+from interprophet import InterProphet
+from peptideprophet import PeptideProphetSequence
+from searchengines.comet import Comet
+from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
+from searchengines.myrimatch import Myrimatch
 
 from SearchCake.searchengines.xtandem import Xtandem
 
