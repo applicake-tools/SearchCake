@@ -10,16 +10,20 @@ import platform
 
 from ruffus import *
 
+
 from applicake.apps.examples.echobasic import EchoBasic
 from applicake.apps.flow.merge import Merge
 from applicake.apps.flow.split import Split
-from interprophet import InterProphet
-from peptideprophet import PeptideProphetSequence
+
 from searchengines.comet import Comet
 from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
 from searchengines.myrimatch import Myrimatch
+from searchengines.xtandem import Xtandem
 
-from SearchCake.searchengines.xtandem import Xtandem
+
+from interprophet import InterProphet
+from peptideprophet import PeptideProphetSequence
+
 
 #basepath = os.path.dirname(__file__) + '/../../'
 
