@@ -1,6 +1,6 @@
 *.py[cod]
 .idea/
-applicake.egg-info/
+searchcake.egg-info/
 *.egg-info/
 build/
 dist/
