@@ -10,7 +10,7 @@ import platform
 
 from ruffus import *
 
-from applicake.apps.examples.a_pyecho import PythonEcho
+from applicake.apps.examples.echobasic import EchoBasic
 from applicake.apps.flow.merge import Merge
 from applicake.apps.flow.split import Split
 from interprophet import InterProphet
@@ -21,14 +21,14 @@ from searchengines.myrimatch import Myrimatch
 
 from SearchCake.searchengines.xtandem import Xtandem
 
-basepath = os.path.dirname(__file__) + '/../../'
-
+#basepath = os.path.dirname(__file__) + '/../../'
 
 
 @files("input.ini", "inputfix.ini")
 def biopersdb(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
-    PythonEcho.main()
+    EchoBasic.main()
+
 
 @follows(biopersdb)
 @split("inputfix.ini", "split.ini_*")
@@ -136,8 +136,10 @@ DBASE=/home/witold/prog/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta
 
 COMET_DIR=/home/witold/prog/SearchCake_Binaries/Comet/linux
 COMET_EXE=comet.exe
+
 MYRIMATCH_DIR=/home/witold/prog/SearchCake_Binaries/MyriMatch/linux/linux_64bit
 MYRIMATCH_EXE=myrimatch
+
 TPPDIR=/home/witold/prog/SearchCake_Binaries/tpp/ubuntu14.04/bin/
 
 """)

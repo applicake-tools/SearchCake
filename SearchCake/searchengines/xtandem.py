@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import os
 
-from applicake.base.apputils import validation
-from toolscake.apps.tpp.searchengines.enzymes import enzymestr_to_engine
-from toolscake.apps.tpp.searchengines.modifications import genmodstr_to_engine
+from searchenginebase import SearchEnginesBase
+from enzymes import enzymestr_to_engine
+from modifications import genmodstr_to_engine
+
 from applicake.base.apputils import templates
 from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys
-from toolscake.apps.tpp.searchengines.searchenginebase import SearchEnginesBase
+from applicake.base.apputils import validation
+
 
 class Xtandem(SearchEnginesBase):
     """

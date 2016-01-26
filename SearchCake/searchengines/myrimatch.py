@@ -3,12 +3,13 @@ import os
 import shutil
 import re
 
-from toolscake.apps.tpp.searchengines.enzymes import enzymestr_to_engine
-from toolscake.apps.tpp.searchengines.modifications import genmodstr_to_engine
+from enzymes import enzymestr_to_engine
+from modifications import genmodstr_to_engine
+from searchenginebase import SearchEnginesBase
+
 from applicake.base.apputils.templates import read_mod_write, get_tpl_of_class
 from applicake.base.apputils.validation import check_exitcode, check_xml
 from applicake.base.coreutils.keys import Keys, KeyHelp
-from toolscake.apps.tpp.searchengines.searchenginebase import SearchEnginesBase
 from applicake.base.coreutils.arguments import Argument
 
 
