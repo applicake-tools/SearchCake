@@ -10,10 +10,13 @@ import platform
 
 from ruffus import *
 
-
 from applicake.apps.examples.echobasic import EchoBasic
 from applicake.apps.flow.merge import Merge
 from applicake.apps.flow.split import Split
+
+from applicake.base import Argument, Keys, KeyHelp, BasicApp
+from applicake.base.coreutils import IniInfoHandler
+
 
 from searchengines.comet import Comet
 from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
@@ -25,7 +28,7 @@ from interprophet import InterProphet
 from peptideprophet import PeptideProphetSequence
 
 
-#basepath = os.path.dirname(__file__) + '/../../'
+##basepath = os.path.dirname(__file__) + '/../../'
 
 
 @files("input.ini", "inputfix.ini")
@@ -96,7 +99,7 @@ def datasetiprophet(infile, outfile):
     InterProphet.main()
 
 @follows(datasetiprophet)
-@files("datasetiprophet.ini", "copy2dropbox.ini")
+@files("datasetiprophet.ini", "convert2csv.ini")
 def convert2csv(infile, outfile):
     sys.argv = [ '--INPUT', infile, '--OUTPUT', outfile]
     IprohetPepXML2CSV.main()
@@ -158,7 +161,6 @@ LOG_LEVEL = DEBUG
 COMMENT = WFTEST - newUPS TPP
 
 # Search parameters
-FDR_CUTOFF = 0.01
 FDR_TYPE = iprophet-pepFDR
 FRAGMASSERR = 0.5
 FRAGMASSUNIT = Da
@@ -170,7 +172,7 @@ STATIC_MODS =
 VARIABLE_MODS = Oxidation (M)
 
 ## TPP
-DECOY_STRING = DECOY_
+DECOY = DECOY_
 IPROPHET_ARGS = MINPROB=0
 
 
@@ -187,15 +189,78 @@ TPPDIR=C:/Users/wolski/prog/applicake-tools/SearchCake_Binaries/tpp/windows/wind
 
 """)
 
-def runPipline():
-    freeze_support()
-    pipeline_run([convert2csv],multiprocess=3)
+#def runPipline():
+#    freeze_support()
+#    pipeline_run([convert2csv],multiprocess=3)
+
+
+class PeptideIdentificationWorkflow(BasicApp):
+    """
+    Let's wrap a ruffus workflow in an app
+    """
+
+    def add_args(self):
+        return [
+            Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
+            Argument(Keys.THREADS, KeyHelp.THREADS, default=1),
+
+            #inter prophet
+            Argument('IPROPHET_ARGS', 'Arguments for InterProphetParser', default='MINPROB=0'),
+            ##  peptide prophet
+            Argument('ENZYME', 'Enzyme used for digest'),
+            Argument('DBASE', 'FASTA dbase'),
+            Argument('MZXML', 'Path to the original MZXML inputfile'),
+            Argument('DECOY', 'Decoy pattern', default='DECOY_'),
+            Argument('TPPDIR', 'Path to the tpp',  default=''),
+
+            ## searchengines
+            Argument('FRAGMASSERR', 'Fragment mass error', default=0.4),
+            Argument('FRAGMASSUNIT', 'Unit of the fragment mass error',default='Da'),
+            Argument('PRECMASSERR', 'Precursor mass error',default=15),
+            Argument('PRECMASSUNIT', 'Unit of the precursor mass error',default='ppm'),
+            Argument('MISSEDCLEAVAGE', 'Number of maximal allowed missed cleavages', default=1),
+            Argument('ENZYME', 'Enzyme used to digest the proteins',default='Trypsin'),
+            Argument('STATIC_MODS', 'List of static modifications',default='Carbamidomethyl (C)'),
+            Argument('VARIABLE_MODS', 'List of variable modifications'),
+            Argument('DBASE', 'Sequence database file with target/decoy entries'),
+
+            ## system config
+            Argument("TPPDIR",  KeyHelp.EXECDIR, default=''),
+            Argument('COMET_DIR', 'executable location.', default=''),
+            Argument('COMET_EXE', 'executable name.', default='comet'),
+            Argument('MYRIMATCH_DIR', 'executable location.', default=''),
+            Argument('MYRIMATCH_EXE',KeyHelp.EXECUTABLE, default='myrimatch')
+        ]
+
+    def run(self, log, info):
+        #write ini for workflow, contains BASEDIR + JOBID
+        pipeline_info = info.copy()
+        pipeline_info['BASEDIR'] = info['WORKDIR']
+
+        path = os.path.join(pipeline_info["WORKDIR"],"input.ini")
+        IniInfoHandler().write(info,path)
+
+        #run workflow
+        os.chdir(pipeline_info['BASEDIR'])
+
+        freeze_support()
+        pipeline_run([convert2csv],multiprocess=int(pipeline_info[Keys.THREADS]))
+
+        #parse "important information"
+        pipeline_info = IniInfoHandler().read("convert2csv.ini")
+        pipeline_info['BASEDIR'] = info['BASEDIR']
+
+        info = pipeline_info
+        log.debug("NOW THIS IS THE REAL RESULT. I FETCHED FROM SUBWORKFLOW %s" % info['COPY'])
+
+        return info
+
 
 if __name__ == '__main__':
     if platform.system() == 'Linux':
         setupLinux()
     else:
         setupWindows()
-    runPipline()
+    PeptideIdentificationWorkflow.main()
 
 #pipeline_printout_graph ('flowchart.png','png',[copy2dropbox],no_key_legend = False) #svg
