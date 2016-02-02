@@ -105,15 +105,16 @@ def convert2csv(infile, outfile):
     IprohetPepXML2CSV.main()
 
 
-def setupLinux():
-    print 'Starting from scratch by creating new input.ini'
+def remove_ini_log():
     for fl in glob.glob("*.ini"):
-        print fl
         os.remove(fl)
     for fl in glob.glob("*.log"):
-        print fl
         os.remove(fl)
 
+
+def setupLinux():
+    print 'Starting from scratch by creating new input.ini'
+    remove_ini_log()
     with open("input.ini", 'w+') as f:
             f.write("""
 LOG_LEVEL = DEBUG
@@ -154,7 +155,6 @@ TPPDIR=/home/witold/prog/SearchCake_Binaries/tpp/ubuntu14.04/bin/
 
 def setupWindows():
     print 'Starting from scratch by creating new input.ini'
-    subprocess.call("rm *ini* *.log", shell=True)
     with open("input.ini", 'w+') as f:
         f.write("""
 LOG_LEVEL = DEBUG
@@ -177,15 +177,15 @@ IPROPHET_ARGS = MINPROB=0
 
 
 ## Parameters
-MZXML=D:/projects/p1958/data/datafiles/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep1_msms1_c.mzXML,D:/projects/p1958/data/datafiles/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep2_msms2_c.mzXML,D:/projects/p1958/data/datafiles/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep3_msms3_c.mzXML,D:/projects/p1958/data/datafiles/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep4_msms4_c.mzXML,D:/projects/p1958/data/datafiles/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep5_msms5_c.mzXML
+MZXML=../SystemMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep1_msms1_c.mzXML,../SystemMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep2_msms2_c.mzXML,../SystemMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep3_msms3_c.mzXML,../SystemMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep4_msms4_c.mzXML,../SystemMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep5_msms5_c.mzXML
 
 
-DBASE=D:/projects/p1958/data/databases/CNCL_05640_2015_09_DECOY.fasta
-COMET_DIR=C:/Users/wolski/prog/applicake-tools/SearchCake_Binaries/Comet/windows/windows_64bit
+DBASE=../SystemMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta
+COMET_DIR=../SearchCake_Binaries/Comet/windows/windows_64bit/
 COMET_EXE=comet.exe
-MYRIMATCH_DIR=C:/Users/wolski/prog/applicake-tools/SearchCake_Binaries/MyriMatch/windows/windows_64bit
+MYRIMATCH_DIR=../SearchCake_Binaries/MyriMatch/windows/windows_64bit/
 MYRIMATCH_EXE=myrimatch.exe
-TPPDIR=C:/Users/wolski/prog/applicake-tools/SearchCake_Binaries/tpp/windows/windows_64bit
+TPPDIR=../SearchCake_Binaries/tpp/windows/windows_64bit/
 
 """)
 
@@ -204,6 +204,7 @@ class PeptideIdentificationWorkflow(BasicApp):
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
             Argument(Keys.THREADS, KeyHelp.THREADS, default=1),
 
+            Argument('COMMENT', 'tpp workflow test'),
             #inter prophet
             Argument('IPROPHET_ARGS', 'Arguments for InterProphetParser', default='MINPROB=0'),
             ##  peptide prophet
@@ -229,7 +230,7 @@ class PeptideIdentificationWorkflow(BasicApp):
             Argument('COMET_DIR', 'executable location.', default=''),
             Argument('COMET_EXE', 'executable name.', default='comet'),
             Argument('MYRIMATCH_DIR', 'executable location.', default=''),
-            Argument('MYRIMATCH_EXE',KeyHelp.EXECUTABLE, default='myrimatch')
+            Argument('MYRIMATCH_EXE', KeyHelp.EXECUTABLE, default='myrimatch')
         ]
 
     def run(self, log, info):
