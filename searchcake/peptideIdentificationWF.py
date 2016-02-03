@@ -198,7 +198,6 @@ class PeptideIdentificationWorkflow(BasicApp):
     """
     Let's wrap a ruffus workflow in an app
     """
-
     def add_args(self):
         return [
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
