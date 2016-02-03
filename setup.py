@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="searchcake",
-    version="0.0.4",
+    version="0.0.5",
     author="Lorenz Blum",
     maintainer=['Lorenz Blum', 'Witold Wolski'],
     author_email="blum@id.ethz.ch",

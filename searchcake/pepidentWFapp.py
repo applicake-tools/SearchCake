@@ -24,7 +24,6 @@ def remove_ini_log():
         os.remove(fl)
 
 
-
 def peptidesearch_overwriteInfo(overwrite):
     # construct info from defaults < info < commandlineargs
     inifile = overwrite['INPUT']
