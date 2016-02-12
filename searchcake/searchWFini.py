@@ -1,4 +1,3 @@
-
 def setup_windows():
     return '''
 COMET_DIR=c:/users/wewol/prog/SearchCake_Binaries/Comet/windows/windows_64bit/
@@ -19,6 +18,7 @@ MYRIMATCH_EXE=myrimatch
 
 TPPDIR=/home/witold/prog/SearchCake_Binaries/tpp/ubuntu14.04/bin/
 '''
+
 
 def setup_general():
     return """
@@ -47,12 +47,27 @@ MZXML =
 DBASE =
     '''
 
-def getMZXML():
-    return ['/home/witold/prog/SysteMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep1_msms1_c.mzXML',
-            '/home/witold/prog/SysteMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep2_msms2_c.mzXML',
-            '/home/witold/prog/SysteMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep3_msms3_c.mzXML',
-            '/home/witold/prog/SysteMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep4_msms4_c.mzXML',
-            '/home/witold/prog/SysteMHC_Data/mzXML/PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep5_msms5_c.mzXML']
+
+def getMZXMLTub1():
+    return ['PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep1_msms1_c.mzXML',
+            'PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep2_msms2_c.mzXML',
+            'PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep3_msms3_c.mzXML',
+            'PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep4_msms4_c.mzXML',
+            'PBMC1_Tubingen_120724_CB_Buffy18_W_20_Rep5_msms5_c.mzXML']
+
+
+def getMZXMLTub2PBMC10():
+    return ['PBMC10_Tubingen_130429_SKUG_Buffy83_W_1p25ug_20_50umx15cmColumn_60min3sDynExcl_3_msms4_c.mzXML',
+            'PBMC10_Tubingen_130430_SKUG_Buffy83_W_1p25ug_20_15cm60min3sDynExcl_4_msms27_c.mzXML']
+
+
+def getMZXMLTub3():
+    return ['PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_1_msms6_c.mzXML',
+            'PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_2_msms7_c.mzXML',
+            'PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_3_msms8_c.mzXML',
+            'PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_4_msms9_c.mzXML',
+            'PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_5_msms10_c.mzXML']
+
 
 def getDB():
     return '/home/witold/prog/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'
