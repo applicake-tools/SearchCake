@@ -34,7 +34,6 @@ def peptidesearch_overwriteInfo(overwrite):
     return info
 
 
-
 if __name__ == '__main__':
     remove_ini_log()
     tmp = swi.setup_general() + swi.setup_search()
@@ -45,7 +44,8 @@ if __name__ == '__main__':
     write_ini(tmp)
 
     path = '/home/witold/prog/SysteMHC_Data/mzXML/'
-    files = swi.getMZXMLTub2PBMC10();
+    #files = swi.getMZXMLTub2PBMC10()
+    files = swi.getMZXMLTub1()
     files = map(lambda x : os.path.join(path, x), files)
     print (files)
     peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : swi.getDB(),'OUTPUT' : 'output.ini'})
