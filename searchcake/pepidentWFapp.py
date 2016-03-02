@@ -1,7 +1,7 @@
 import os
 import glob
 import platform
-import searchWFini as swi
+import pepidentWFini as swi
 from applicake.base.apputils import dicts
 import pepidentWF
 from multiprocessing import freeze_support

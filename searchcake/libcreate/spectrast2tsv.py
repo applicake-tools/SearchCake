@@ -7,7 +7,7 @@ from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys, KeyHelp
 
 
-class Spectrast2TSV2traML(WrappedApp):
+class Spectrast2TSV(WrappedApp):
     """
     Wrapper for the famous spectrast2traml.sh script
     """
@@ -64,10 +64,8 @@ class Spectrast2TSV2traML(WrappedApp):
         if info.get('TSV_SERIES', "") != "":
             tsvopts += ' -s ' + info['TSV_SERIES'].replace(";", ",")
 
-        command = 'spectrast2tsv.py %s -a %s %s && ' \
-                  'tsv2traml.sh %s %s' % (
-                      tsvopts, info['TSV'], info['SPLIB'],
-                      info['TSV'], info['TRAML'])
+        command = 'spectrast2tsv.py %s -a %s %s' % (
+                      tsvopts, info['TSV'], info['SPLIB'])
 
         return info, command
 
@@ -76,8 +74,7 @@ class Spectrast2TSV2traML(WrappedApp):
         validation.check_exitcode(log, exit_code)
         validation.check_file(log, info['SPLIB'])
         validation.check_file(log, info['TSV'])
-        validation.check_xml(log, info['TRAML'])
         return info
 
 if __name__ == "__main__":
-    Spectrast2TSV2traML.main()
+    Spectrast2TSV.main()
