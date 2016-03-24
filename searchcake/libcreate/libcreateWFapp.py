@@ -39,4 +39,9 @@ if __name__ == '__main__':
     files = map(lambda x : os.path.join(path, x), files)
     print (files)
     peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : swi.getDB(),'OUTPUT' : 'output.ini'})
+
+    pepidentWF.run_peptide_WF()
+
+    #ini file voodoo
+
     run_libcreate_WF()
