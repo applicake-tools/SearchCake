@@ -1,39 +1,35 @@
-# identification workflow for systeMHC
-
 #!/usr/bin/env python
 import sys
 
-from ruffus import *
+# identification workflow for systeMHC
 
-from applicake.apps.examples.echobasic import EchoBasic
+from ruffus import *
+from applicake.apps.flow.jobid import Jobid
 from applicake.apps.flow.merge import Merge
 from applicake.apps.flow.split import Split
-
+from applicake.base import BasicApp
+from applicake.base.coreutils import IniInfoHandler
 from searchengines.comet import Comet
 from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
 from searchengines.myrimatch import Myrimatch
 from searchengines.xtandem import Xtandem
-
-
 from interprophet import InterProphet
 from peptideprophet import PeptideProphetSequence
-
 from multiprocessing import freeze_support
-from ruffus import pipeline_run
 
-##basepath = os.path.dirname(__file__) + '/../../'
 
-@files("input.ini", "inputfix.ini")
-def biopersdb(infile, outfile):
+@files("pepinput.ini", "jobid.ini")
+def jobid(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
-    EchoBasic.main()
+    Jobid.main()
 
 
-@follows(biopersdb)
-@split("inputfix.ini", "split.ini_*")
+@follows(jobid)
+@split("jobid.ini", "split.ini_*")
 def split_dataset(infile, unused_outfile):
     sys.argv = ['--INPUT', infile, '--SPLIT', 'split.ini', '--SPLIT_KEY', 'MZXML']
     Split.main()
+
 
 ###################################################################################
 
@@ -76,12 +72,14 @@ def pepprocomet(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--NAME', 'pepcomet']
     PeptideProphetSequence.main()
 
+
 ############################# TAIL: PARAMGENERATE ##################################
 
-@merge([pepprocomet,peppromyri], "ecollate.ini")
+@merge([pepprocomet, peppromyri], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
     sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
     Merge.main()
+
 
 @follows(merge_datasets)
 @files("ecollate.ini_0", "datasetiprophet.ini")
@@ -93,14 +91,30 @@ def datasetiprophet(infile, outfile):
 @follows(datasetiprophet)
 @files("datasetiprophet.ini", "convert2csv.ini")
 def convert2csv(infile, outfile):
-    sys.argv = [ '--INPUT', infile, '--OUTPUT', outfile]
+    sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
     IprohetPepXML2CSV.main()
 
 
-def run_peptide_WF(nrthreads = 2):
+def run_peptide_WF(nrthreads=2):
     freeze_support()
     pipeline_run([convert2csv], multiprocess=nrthreads)
 
 
+class PepidentWF(BasicApp):
+    def add_args(self):
+        return Myrimatch().add_args() + \
+               Xtandem().add_args() + \
+               Comet().add_args() + \
+               PeptideProphetSequence().add_args() + \
+               InterProphet().add_args() + \
+               IprohetPepXML2CSV().add_args()
 
+    def run(self,log, info):
+        ih = IniInfoHandler()
+        ih.write(info,"pepinput.ini")
+        run_peptide_WF()
+        info = ih.read("convert2csv.ini")
+        return info
 
+if __name__ == "__main__":
+    PepidentWF.main()
