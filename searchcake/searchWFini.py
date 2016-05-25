@@ -41,11 +41,21 @@ STATIC_MODS =
 VARIABLE_MODS = Oxidation (M)
 
 ## TPP
-DECOY = DECOY_
+DECOY = reverse_
 IPROPHET_ARGS = MINPROB=0
 MZXML =
 DBASE =
     '''
+
+
+def getTuberculosisData():
+    return ['carone_20150801_QEp7_MiBa_SA_iRT_BCG_1.mzXML',
+            'carone_20150801_QEp7_MiBa_SA_iRT_BCG_2.mzXML',
+            'carone_20150801_QEp7_MiBa_SA_iRT_THP_1.mzXML',
+            'carone_20150801_QEp7_MiBa_SA_iRT_THP_2.mzXML',
+            'carone_Y150824_001_THP1_DDA.mzXML',
+            'carone_Y150824_001_THP1_rBCG_DDA.mzXML'
+            ]
 
 
 def getMZXMLTub1():
@@ -71,3 +81,10 @@ def getMZXMLTub3():
 
 def getDB():
     return '/home/witold/prog/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'
+
+def getTubercoDB():
+    return '/home/witold/prog/SysteMHC_Data/fasta/mycBovis.fasta'
+
+def getHumanTubercoDB():
+    return '/home/witold/prog/SysteMHC_Data/fasta/Mycobacterium_bovis_BCG_str_ATCC_35733_PATRIC_decoy_uniprot_20209_reviewed_canonical_irt_reverse_140724.fasta'
+

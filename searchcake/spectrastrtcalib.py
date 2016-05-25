@@ -25,7 +25,7 @@ class SpectrastRTcalib(WrappedApp):
             Argument("FDR_CUTOFF", "cutoff for FDR"),
 
             Argument('RUNRT', "Boolean to activate iRT calibration"),
-            Argument('RSQ_THRESHOLD', 'specify r-squared threshold to accept linear regression'),
+            Argument('RSQ_THRESHOLD', 'specify r-squared threshold to accept linear regression' , default ='' ),
             Argument('RTKIT', 'RT kit (file)'),
             Argument('MS_TYPE', 'ms instrument type'),
             Argument('CONSENSUS_TYPE', 'consensus type consensus/best replicate'),
@@ -71,12 +71,16 @@ class SpectrastRTcalib(WrappedApp):
         consensus = consensus_base + '.splib'
         info['SPLIB'] = consensus
 
-        command = "spectrast -L%s -c_RDYDECOY -cI%s -cP%s %s -cN%s %s && " \
-                  "spectrast -L%s -c_BIN! -cA%s -cN%s %s" % (
-                      info['SPLOG'], info['MS_TYPE'], info['IPROB'], rtcorrect, rtcalib_base, peplink,
-                      info['SPLOG'], consensustype, consensus_base, rtcalib)
+        command1 = "spectrast -L{slog} -c_RDYDECOY -cI{mstype} -cP{iprob} {rtcorrect} -cN{rtcalib_base} {peplink}".format(
+            slog=info['SPLOG'],mstype=info['MS_TYPE'],iprob = info['IPROB'],rtcorrect=rtcorrect,
+            rtcalib_base= rtcalib_base, peplink = peplink)
 
-        return info, command
+        command2 = "spectrast -L{slog} -c_BIN! -cA{consensustype} -cN{consensus_base} {rtcalib}".format(
+            slog=info['SPLOG'],consensustype=consensustype, consensus_base=consensus_base,rtcalib=rtcalib)
+                      #info['SPLOG'], info['MS_TYPE'], info['IPROB'], rtcorrect, rtcalib_base, peplink,
+                      #info['SPLOG'], consensustype, consensus_base, rtcalib)
+
+        return info, [command1, command2]
 
     def validate_run(self, log, info, exit_code, stdout):
         if info['RUNRT'] == 'True':
