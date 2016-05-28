@@ -1,23 +1,24 @@
+import os
 def setup_windows():
     return '''
-COMET_DIR=c:/users/wewol/prog/SearchCake_Binaries/Comet/windows/windows_64bit/
+COMET_DIR=c:/users/wewol/prog/searchcake_binaries/Comet/windows/windows_64bit/
 COMET_EXE=comet.exe
-MYRIMATCH_DIR=c:/users/wewol/prog/SearchCake_Binaries/MyriMatch/windows/windows_64bit/
+MYRIMATCH_DIR=c:/users/wewol/prog/searchcake_binaries/MyriMatch/windows/windows_64bit/
 MYRIMATCH_EXE=myrimatch.exe
-TPPDIR=c:/users/wewol/prog/SearchCake_Binaries/tpp/windows/windows_64bit/
+TPPDIR=c:/users/wewol/prog/searchcake_binaries/tpp/windows/windows_64bit/
 '''
 
 
 def setup_linux():
     return '''
-COMET_DIR=/home/witold/prog/SearchCake_Binaries/Comet/linux
+COMET_DIR={systemhc}/searchcake_binaries/Comet/linux
 COMET_EXE=comet.exe
 
-MYRIMATCH_DIR=/home/witold/prog/SearchCake_Binaries/MyriMatch/linux/linux_64bit
+MYRIMATCH_DIR={systemhc}/searchcake_binaries/MyriMatch/linux/linux_64bit
 MYRIMATCH_EXE=myrimatch
 
-TPPDIR=/home/witold/prog/SearchCake_Binaries/tpp/ubuntu14.04/bin/
-'''
+TPPDIR={systemhc}/searchcake_binaries/tpp/ubuntu14.04/bin/
+'''.format(systemhc=os.environ('SYSTEMHC'))
 
 
 def setup_general():
@@ -80,11 +81,16 @@ def getMZXMLTub3():
 
 
 def getDB():
-    return '/home/witold/prog/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'
+    return '{systemhc}/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'.format(systemhc=os.environ('SYSTEMHC'))
 
 def getTubercoDB():
-    return '/home/witold/prog/SysteMHC_Data/fasta/mycBovis.fasta'
+    return '{systemhc}/SysteMHC_Data/fasta/mycBovis.fasta'.format(systemhc=os.environ('SYSTEMHC'))
+
 
 def getHumanTubercoDB():
-    return '/home/witold/prog/SysteMHC_Data/fasta/Mycobacterium_bovis_BCG_str_ATCC_35733_PATRIC_decoy_uniprot_20209_reviewed_canonical_irt_reverse_140724.fasta'
+    return '{systemhc}/SysteMHC_Data/fasta/Mycobacterium_bovis_BCG_str_ATCC_35733_PATRIC_decoy_uniprot_20209_reviewed_canonical_irt_reverse_140724.fasta'.format(systemhc=os.environ('SYSTEMHC'))
+'
+
+
+
 
