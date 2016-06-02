@@ -35,7 +35,7 @@ def split_dataset(infile, unused_outfile):
     sys.argv = ['--INPUT', infile, '--SPLIT', 'split.ini', '--SPLIT_KEY', 'MZXML']
     Split.main()
 
-###################################################################################
+### MYRIMATCH #############################################################################
 
 @transform(split_dataset, regex("split.ini_"), "rawmyri.ini_")
 def myri(infile, outfile):
@@ -63,7 +63,7 @@ def pepprotandem(infile, outfile):
     PeptideProphetSequence.main()
 
 
-###################################################################################
+### COMET #####################################################################
 
 @transform(split_dataset, regex("split.ini_"), "rawcomet.ini_")
 def comet(infile, outfile):
@@ -97,7 +97,7 @@ def convert2csv(infile, outfile):
     IprohetPepXML2CSV.main()
 
 
-def run_peptide_WF(nrthreads = 2):
+def run_peptide_WF(nrthreads = 3):
     freeze_support()
     pipeline_run([convert2csv], multiprocess=nrthreads)
 
