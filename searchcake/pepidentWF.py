@@ -77,7 +77,7 @@ def pepprocomet(infile, outfile):
     PeptideProphetSequence.main()
 
 ############################# TAIL: PARAMGENERATE ##################################
-
+# disabled tandem
 @merge([pepprocomet,peppromyri], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
     sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]

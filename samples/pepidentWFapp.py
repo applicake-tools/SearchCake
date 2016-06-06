@@ -2,8 +2,8 @@ import os
 import glob
 import platform
 from applicake.base.apputils import dicts
-import searchcake.pepidentWF
-
+import searchcake.pepidentWF as pepidentWF
+import pandas as pd
 from multiprocessing import freeze_support
 from ruffus import pipeline_run
 
@@ -140,12 +140,31 @@ def run(files):
     #files = swi.getMZXMLTub2PBMC10() + swi.getMZXMLTub3()
     print files  #files = swi.getTuberculosisData()
     #files = map(lambda x : os.path.join(path, x), files)
-    peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : swi.getDB(),'OUTPUT' : 'output.ini'})
+    peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : getDB(),'OUTPUT' : 'output.ini'})
     pepidentWF.run_peptide_WF( nrthreads = 4 )
 
+def processAllFiles():
+    files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
+    run(files)
+
+def processByBatch(allMzXMLs):
+    import ntpath
+    path = "{}/SysteMHC_Data/annotation/cleanedTable.csv".format(os.environ.get('SYSTEMHC'))
+    df = pd.read_csv(path)
+    for i in df["MHCAllele"].unique():
+        tmp = df[df["MHCAllele"] == i]
+        filesIds = tmp['FileName']
+        res = list()
+        for i in filesIds:
+            res  += [x for x in allMzXMLs if ntpath.basename(x) == i]
+        #print(res)
+        run(res)
+
 if __name__ == '__main__':
-    files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")    
-    run(files)    
+    files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
+    #files = files[0:1]    
+    processByBatch(files)
+    #run(files)
 
 
 
