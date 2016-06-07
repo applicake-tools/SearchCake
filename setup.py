@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="searchcake",
+    name="searchcake2",
     version="0.0.5",
-    author="Lorenz Blum",
+    author=["Lorenz Blum", "Witold Wolski"],
     maintainer=['Lorenz Blum', 'Witold Wolski'],
     author_email="blum@id.ethz.ch",
     maintainer_email=["blum@id.ethz.ch",'wewolski@gmail.com'],

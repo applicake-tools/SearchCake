@@ -162,9 +162,9 @@ def processByBatch(allMzXMLs):
 
 if __name__ == '__main__':
     files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
-    #files = files[0:1]    
-    processByBatch(files)
-    #run(files)
+    files = files[0:1]    
+    #processByBatch(files)
+    run(files)
 
 
 

@@ -13,12 +13,13 @@ from searchengines.comet import Comet
 from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
 from searchengines.myrimatch import Myrimatch
 from searchengines.xtandem import Xtandem
-from interprophet import InterProphet
-from peptideprophet import PeptideProphetSequence
+from prophets.interprophet import InterProphet
+from prophets.peptideprophet import PeptideProphetSequence
+
 from multiprocessing import freeze_support
 
 
-@files("pepinput.ini", "jobid.ini")
+@files("input.ini", "jobid.ini")
 def jobid(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
     Jobid.main()

@@ -18,10 +18,10 @@ class Xtandem(SearchEnginesBase):
 
     def add_args(self):
         args = super(Xtandem, self).add_args()
-        args.append(Argument('TPPDIR','Path to the tpp', default=''))i
-        args.append(Argument('TANDEM_EXE',KeyHelp.EXECUTABLE,default='tandem')
+        args.append(Argument('TPPDIR','Path to the tpp', default=''))
+        args.append(Argument('TANDEM_EXE',KeyHelp.EXECUTABLE,default='tandem'))
         
-        args.append(Argument('TANDEM2XML_EXE',KeyHelp.EXECUTABLE,default='Tandem2XML')
+        args.append(Argument('TANDEM2XML_EXE',KeyHelp.EXECUTABLE,default='TandeAm2XML'))
         args.append(Argument('XTANDEM_SCORE', 'Scoring algorithm used in the search.'))
         return args
 
@@ -55,10 +55,10 @@ class Xtandem(SearchEnginesBase):
         info[Keys.PEPXML] = os.path.join(wd, 'xtandem.pep.xml')
         command = []
         tpp_dir = info['TPPDIR']
-        command.append("{exe} {tandeminput}".foramt(exe=os.path.join(tpp_dir,exe),tandeminput=app_info['XTANDEM_INPUT'])
+        command.append("{exe} {tandeminput}".foramt(exe=os.path.join(tpp_dir,exe),tandeminput=app_info['XTANDEM_INPUT']))
 
-        command.appned('Tandem2XML {tandemresult} {pepxml} '.format(
-            tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML])
+        command.append('Tandem2XML {tandemresult} {pepxml} '.format(
+            tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML]))
         return info, command
 
     @staticmethod
