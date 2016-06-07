@@ -20,22 +20,23 @@ class SpectrastRTcalib(WrappedApp):
             Argument(Keys.MZXML, KeyHelp.MZXML),
 
             Argument(Keys.PEPXML, KeyHelp.PEPXML),
+            Argument('TPPDIR','tpp directory', default='')
             Argument('MAYUOUT', 'mayu out csv'),
-            Argument('FDR_TYPE', "type of FDR: iprophet/mayu m/pep/protFDR"),
-            Argument("FDR_CUTOFF", "cutoff for FDR"),
+            Argument('FDR_TYPE', "type of FDR: iprophet/mayu m/pep/protFDR",default='iprophet'),
+            Argument("FDR_CUTOFF", "cutoff for FDR",default=0.1),
 
-            Argument('RUNRT', "Boolean to activate iRT calibration"),
-            Argument('RSQ_THRESHOLD', 'specify r-squared threshold to accept linear regression' , default ='' ),
+            Argument('RUNRT', "Boolean to activate iRT calibration",default=False),
+            Argument('RSQ_THRESHOLD', 'specify r-squared threshold to accept linear regression' , default =0.9 ),
             Argument('RTKIT', 'RT kit (file)'),
             Argument('MS_TYPE', 'ms instrument type'),
-            Argument('CONSENSUS_TYPE', 'consensus type consensus/best replicate'),
+            Argument('CONSENSUS_TYPE', 'consensus type consensus/best replicate',default='consensus')
         ]
 
     def prepare_run(self, log, info):
         # symlink the pepxml and mzxml files first into a single directory
         peplink = os.path.join(info[Keys.WORKDIR], os.path.basename(info[Keys.PEPXML]))
-        log.debug('create symlink [%s] -> [%s]' % (info[Keys.PEPXML], peplink))
-        os.symlink(info[Keys.PEPXML], peplink)
+        #log.debug('create symlink [%s] -> [%s]' % (info[Keys.PEPXML], peplink))
+        #os.symlink(info[Keys.PEPXML], peplink)
 
         if isinstance(info[Keys.MZXML], list):
             mzxmlslinks = info[Keys.MZXML]

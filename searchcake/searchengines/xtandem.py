@@ -18,20 +18,30 @@ class Xtandem(SearchEnginesBase):
 
     def add_args(self):
         args = super(Xtandem, self).add_args()
+        args.append(Argument('TPPDIR','Path to the tpp', default=''))i
+        args.append(Argument('TANDEM_EXE',KeyHelp.EXECUTABLE,default='tandem')
+        
+        args.append(Argument('TANDEM2XML_EXE',KeyHelp.EXECUTABLE,default='Tandem2XML')
         args.append(Argument('XTANDEM_SCORE', 'Scoring algorithm used in the search.'))
         return args
 
     def prepare_run(self, log, info):
         wd = info[Keys.WORKDIR]
-        exe = info.get(Keys.EXECUTABLE, 'tandem')
+        exe = info.get('TANDEM_EXE')
 
         # need to create a working copy to prevent replacement with app specific definitions
         app_info = info.copy()
 
         app_info = self._define_score(app_info, log)
-        app_info["STATIC_MODS"], app_info["VARIABLE_MODS"], app_info['TERMINAL_MODS'] = genmodstr_to_engine(info["STATIC_MODS"],
-                                                                                 info["VARIABLE_MODS"], 'XTandem')
-        app_info['ENZYME'], app_info['XTANDEM_SEMI_CLEAVAGE'] = enzymestr_to_engine(info['ENZYME'], 'XTandem')
+        
+        app_info["STATIC_MODS"],
+        app_info["VARIABLE_MODS"],
+        app_info['TERMINAL_MODS'] = genmodstr_to_engine(info["STATIC_MODS"],
+            info["VARIABLE_MODS"],
+             'XTandem')
+        
+        app_info['ENZYME'],
+        app_info['XTANDEM_SEMI_CLEAVAGE'] = enzymestr_to_engine(info['ENZYME'], 'XTandem')
 
         #files required and written
         app_info['XTANDEM_PARAMS'] = os.path.join(wd, 'xtandem.params')
@@ -43,9 +53,12 @@ class Xtandem(SearchEnginesBase):
 
         #integrated tandem2xml XTANDEM_RESULT conversion
         info[Keys.PEPXML] = os.path.join(wd, 'xtandem.pep.xml')
+        command = []
+        tpp_dir = info['TPPDIR']
+        command.append("{exe} {tandeminput}".foramt(exe=os.path.join(tpp_dir,exe),tandeminput=app_info['XTANDEM_INPUT'])
 
-        command = '%s %s && Tandem2XML %s %s ' % (
-        exe, app_info['XTANDEM_INPUT'], app_info['XTANDEM_RESULT'], info[Keys.PEPXML])
+        command.appned('Tandem2XML {tandemresult} {pepxml} '.format(
+            tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML])
         return info, command
 
     @staticmethod

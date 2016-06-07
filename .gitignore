@@ -4,3 +4,6 @@ searchcake.egg-info/
 *.egg-info/
 build/
 dist/
+*.swp
+*.sqlite
+
