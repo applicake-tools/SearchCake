@@ -103,12 +103,12 @@ def run_peptide_WF(nrthreads=2):
 
 class PepidentWF(BasicApp):
     def add_args(self):
-        return Myrimatch().add_args() + \
-               Xtandem().add_args() + \
-               Comet().add_args() + \
-               PeptideProphetSequence().add_args() + \
-               InterProphet().add_args() + \
-               IprohetPepXML2CSV().add_args()
+        #return #Myrimatch().add_args() + \
+               #Xtandem().add_args() + \
+               #Comet().add_args() + \
+               #PeptideProphetSequence().add_args() + \
+               #InterProphet().add_args() + \
+        return IprohetPepXML2CSV().add_args()
 
     def run(self,log, info):
         ih = IniInfoHandler()

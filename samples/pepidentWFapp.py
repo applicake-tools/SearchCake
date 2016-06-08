@@ -1,4 +1,5 @@
 import os
+import random
 import glob
 import platform
 from applicake.base.apputils import dicts
@@ -34,7 +35,7 @@ TPPDIR={systemhc}/searchcake_binaries/tpp/ubuntu14.04/bin/
 def setup_general():
     return """
 LOG_LEVEL = DEBUG
-COMMENT = WFTEST - newUPS TPP
+COMMENT = bbWFTEST - newUPS TPP
 """
 
 
@@ -118,6 +119,8 @@ def peptidesearch_overwriteInfo(overwrite):
     ih = get_handler(inifile)
     fileinfo = ih.read(inifile)
     info = dicts.merge(overwrite, fileinfo)
+    #print("------")
+    #print info
     ih.write(info,'input.ini')
     return info
 
@@ -127,44 +130,52 @@ def getMzXMLFiles(path,extension="mzXML"):
     print (dd)
     return glob.glob(dd);
 
-def run(files):
+def run(files, workDir):
     remove_ini_log()
+    
+    
     tmp = setup_general() + setup_search()
     if platform.system() == 'Linux':
         tmp += setup_linux()
     else:
         tmp += setup_windows()
+    print(tmp)
     write_ini(tmp)
 
     path = '{}/SysteMHC_Data/mzXML/'.format(os.environ.get('SYSTEMHC'))
+    
     #files = swi.getMZXMLTub2PBMC10() + swi.getMZXMLTub3()
     print files  #files = swi.getTuberculosisData()
-    #files = map(lambda x : os.path.join(path, x), files)
-    peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : getDB(),'OUTPUT' : 'output.ini'})
+    
+    peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : getDB(),'OUTPUT' : 'output.ini', 'JOB_ID':workDir})
     pepidentWF.run_peptide_WF( nrthreads = 4 )
 
 def processAllFiles():
     files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
     run(files)
 
+
 def processByBatch(allMzXMLs):
     import ntpath
-    path = "{}/SysteMHC_Data/annotation/cleanedTable.csv".format(os.environ.get('SYSTEMHC'))
+    path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(
+        os.environ.get('SYSTEMHC'))
     df = pd.read_csv(path)
-    for i in df["MHCAllele"].unique():
-        tmp = df[df["MHCAllele"] == i]
+    for sample in df["SampleID"].unique():
+        tmp = df[df["SampleID"] == sample]
         filesIds = tmp['FileName']
         res = list()
         for i in filesIds:
             res  += [x for x in allMzXMLs if ntpath.basename(x) == i]
+        #print(">>><<<")
+        #print(sample)
         #print(res)
-        run(res)
+        run(res, sample)
+
 
 if __name__ == '__main__':
     files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
-    files = files[0:1]    
-    #processByBatch(files)
-    run(files)
+    processByBatch(files)
+    #run(files, "dummydir" + str(random.randint(1000,9999)))
 
 
 

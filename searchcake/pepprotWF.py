@@ -4,7 +4,7 @@ from ruffus import *
 from applicake.base import BasicApp
 from applicake.base.coreutils import IniInfoHandler
 from searchcake.pepidentWF import PepidentWF
-from searchcake.proteinprophet import ProteinProphet
+from searchcake.prophets.proteinprophet import ProteinProphet
 from multiprocessing import freeze_support
 
 @files("input.ini", "pepwf.ini")
