@@ -4,12 +4,10 @@ import glob
 import platform
 from applicake.base.apputils import dicts
 import searchcake.pepidentWF as pepidentWF
+import searchcake.libcreateWF as libcreateWF
 import pandas as pd
-from multiprocessing import freeze_support
-from ruffus import pipeline_run
 
 from applicake.base import get_handler
-
 
 def setup_windows():
     return '''
@@ -18,6 +16,20 @@ COMET_EXE=comet.exe
 MYRIMATCH_DIR=c:/users/wewol/prog/searchcake_binaries/MyriMatch/windows/windows_64bit/
 MYRIMATCH_EXE=myrimatch.exe
 TPPDIR=c:/users/wewol/prog/searchcake_binaries/tpp/windows/windows_64bit/
+'''
+
+def spectrastParams():
+    return '''
+#Spectrast parameters
+MS_TYPE=CID-QTOF
+CONSENSUS_TYPE=consensus
+DECOY=DECOY_
+IPROB=0.1
+'''
+
+def netMHCParams():
+    return '''
+ALLELE_LIST=
 '''
 
 def setup_linux():
@@ -58,6 +70,7 @@ IPROPHET_ARGS = MINPROB=0
 MZXML =
 DBASE =
     '''
+
 
 
 def getTuberculosisData():
@@ -106,21 +119,19 @@ def write_ini(ini, dest="."):
         f.write(ini)
 
 
+
 def remove_ini_log():
-    for fl in glob.glob("*.ini"):
+    for fl in glob.glob("*.ini*"):
         os.remove(fl)
-    for fl in glob.glob("*.log"):
+    for fl in glob.glob("*.log*"):
         os.remove(fl)
 
 
 def peptidesearch_overwriteInfo(overwrite):
-    # construct info from defaults < info < commandlineargs
     inifile = overwrite['INPUT']
     ih = get_handler(inifile)
     fileinfo = ih.read(inifile)
     info = dicts.merge(overwrite, fileinfo)
-    #print("------")
-    #print info
     ih.write(info,'input.ini')
     return info
 
@@ -128,12 +139,11 @@ def getMzXMLFiles(path,extension="mzXML"):
     import glob
     dd = path + "*." + extension
     print (dd)
-    return glob.glob(dd);
+    return glob.glob(dd)
 
-def run(files, workDir):
+
+def run(files, alleles, workDir):
     remove_ini_log()
-    
-    
     tmp = setup_general() + setup_search()
     if platform.system() == 'Linux':
         tmp += setup_linux()
@@ -141,40 +151,47 @@ def run(files, workDir):
         tmp += setup_windows()
     print(tmp)
     write_ini(tmp)
-
-    path = '{}/SysteMHC_Data/mzXML/'.format(os.environ.get('SYSTEMHC'))
-    
-    #files = swi.getMZXMLTub2PBMC10() + swi.getMZXMLTub3()
-    print files  #files = swi.getTuberculosisData()
-    
-    peptidesearch_overwriteInfo({'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : getDB(),'OUTPUT' : 'output.ini', 'JOB_ID':workDir})
-    pepidentWF.run_peptide_WF( nrthreads = 4 )
-
-def processAllFiles():
-    files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
-    run(files)
+    peptidesearch_overwriteInfo( {'INPUT' : "input.ini", 'MZXML': files, 'DBASE' : getDB(),'OUTPUT' : 'output.ini', 'JOB_ID':workDir, 'ALLELE_LIST':alleles})
+    libcreateWF.run_libcreate_WF(nrthreads= 2)
 
 
-def processByBatch(allMzXMLs):
+def processByBatch(allMzXMLs, sample, df):
     import ntpath
+    tmp = df[df["SampleID"] == sample]
+    filesIds = tmp['FileName']
+    res = list()
+    for i in filesIds:
+        res  += [x for x in allMzXMLs if ntpath.basename(x) == i]
+    if(len(res)==0):
+        print("no files for sample" + sample)
+        return 1
+    alleles = tmp['MHCAllele'].unique().tolist()
+    if len(alleles) != 1:
+        print "There are more than one allele set for this sample : {}".format(";".join(alleles))
+    alleles = alleles[0].split(",")
+    run(res, alleles, sample)
+ 
+
+def processAllBatches(files):
     path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(
         os.environ.get('SYSTEMHC'))
     df = pd.read_csv(path)
+    #processByBatch(files,"Kowalewskid_160207_Rammensee_Germany_PBMC_Buffy83" , df)
+    #return 0
     for sample in df["SampleID"].unique():
-        tmp = df[df["SampleID"] == sample]
-        filesIds = tmp['FileName']
-        res = list()
-        for i in filesIds:
-            res  += [x for x in allMzXMLs if ntpath.basename(x) == i]
-        #print(">>><<<")
-        #print(sample)
-        #print(res)
-        run(res, sample)
+        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<".format(sample)
+        print "\n\n\n\n"
+        processByBatch(files,sample , df)
 
 
 if __name__ == '__main__':
+    res = os.environ.get('SYSTEMHC')
+
+    if res == None:
+        print "SYSTEMHC not set"
+        exit(1)
     files = getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
-    processByBatch(files)
+    processAllBatches(files)
     #run(files, "dummydir" + str(random.randint(1000,9999)))
 
 

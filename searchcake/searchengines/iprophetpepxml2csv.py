@@ -19,7 +19,6 @@ class IprohetPepXML2CSV(BasicApp):
         return [
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
             Argument(Keys.PEPXML, Keys.PEPXML),
-            #Argument('PEPCSV', 'Path to output CSV - result of pepxml conversion'),
         ]
 
     def run(self, log, info):

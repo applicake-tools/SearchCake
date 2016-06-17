@@ -16,9 +16,7 @@ class Spectrast2TSV(WrappedApp):
         return [
             Argument('SPLIB', 'Spectrast library in .splib format'),
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
-
             Argument('CONSENSUS_TYPE', 'consensus type cAC cAB'),
-
             Argument('TSV_MASS_LIMITS', 'Lower and Upper mass limits.'),
             Argument('TSV_ION_LIMITS', 'Min and Max number of reported ions per peptide/z'),
             Argument('TSV_PRECISION', 'Maximum error allowed at the annotation of a fragment ion'),

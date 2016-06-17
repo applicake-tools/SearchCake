@@ -13,7 +13,6 @@ class SpectrastRTcalib(WrappedApp):
     """
     Create raw text library with iRT correction and without DECOYS_ from pepxml
     """
-
     def add_args(self):
         return [
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
@@ -38,14 +37,6 @@ class SpectrastRTcalib(WrappedApp):
         #log.debug('create symlink [%s] -> [%s]' % (info[Keys.PEPXML], peplink))
         #os.symlink(info[Keys.PEPXML], peplink)
 
-        if isinstance(info[Keys.MZXML], list):
-            mzxmlslinks = info[Keys.MZXML]
-        else:
-            mzxmlslinks = [info[Keys.MZXML]]
-        for f in mzxmlslinks:
-            dest = os.path.join(info[Keys.WORKDIR], os.path.basename(f))
-            log.debug('create symlink [%s] -> [%s]' % (f, dest))
-            os.symlink(f, dest)
 
         info['SPLOG'] = os.path.join(info[Keys.WORKDIR], 'spectrast.log')
 
