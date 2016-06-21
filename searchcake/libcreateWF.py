@@ -16,6 +16,9 @@ from prophets.peptideprophet import PeptideProphetSequence
 from libcreate.spectrast import Spectrast
 from multiprocessing import freeze_support
 from systemhccake.netMHC import NetMHC
+from systemhccake.netMHC2 import NetMHC2
+
+
 
 @files("input.ini", "jobid.ini")
 def jobid(infile, outfile):
@@ -30,8 +33,7 @@ def split_dataset(infile, unused_outfile):
     Split.main()
 
 
-###################################################################################
-
+####################################################################
 @transform(split_dataset, regex("split.ini_"), "rawmyri.ini_")
 def myri(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--THREADS', '4']
@@ -44,8 +46,7 @@ def peppromyri(infile, outfile):
     PeptideProphetSequence.main()
 
 
-### TANDEM NOT YET THERE ########################################################
-
+####### TANDEM NOT YET THERE ########################################
 @transform(split_dataset, regex("split.ini_"), "rawtandem.ini_")
 def tandem(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--THREADS', '4']
@@ -57,8 +58,7 @@ def pepprotandem(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--NAME', 'peptandem']
     PeptideProphetSequence.main()
 
-###################################################################################
-
+####################################################################
 @transform(split_dataset, regex("split.ini_"), "rawcomet.ini_")
 def comet(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--THREADS', '4']
@@ -71,15 +71,13 @@ def pepprocomet(infile, outfile):
     PeptideProphetSequence.main()
 
 
-############################# TAIL: PARAMGENERATE ##################################
-
+############################# TAIL: PARAMGENERATE ##################
 @merge([pepprocomet], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
     sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
     Merge.main()
 
-############################## RunProphets ##########################################
-
+############################## RunProphets #########################
 @follows(merge_datasets)
 @files("ecollate.ini_0", "datasetiprophet.ini")
 def datasetiprophet(infile, outfile):
@@ -87,32 +85,44 @@ def datasetiprophet(infile, outfile):
     InterProphet.main()
 
 
-
+########################## MERGE ALL DATASETS ######################
 @follows(datasetiprophet)
 @files("datasetiprophet.ini", "convert2csv.ini")
 def convert2csv(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
     IprohetPepXML2CSV.main()
 
-################################ NETMHC ###################################################
 
+####################### Spectrast ###################################
 @follows(convert2csv)
+@files("datasetiprophet.ini", "spectrast.ini")
+def pepxml2spectrast(infile, outfile):
+    sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
+    Spectrast.main()
+
+################################ NETMHC #############################
+@follows(pepxml2spectrast)
 @files("convert2csv.ini", "netMHC.ini")
 def runNetMHC(infile, outfile):
     sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
     NetMHC.main()
 
 
-####################### Spectrast ########################
+@follows(pepxml2spectrast)
+@files("convert2csv.ini", "netMHC.ini")
+def runNetMHC2(infile, outfile):
+    sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
+    NetMHC2.main()
 
-@follows(runNetMHC)
-@files("datasetiprophet.ini", "spectrast.ini")
-def pepxml2spectrast(infile, outfile):
-    sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
-    Spectrast.main()
-
+def run_libcreate_withNetMHC_WF(nrthreads=2):
+    freeze_support()
+    pipeline_run([runNetMHC], multiprocess=nrthreads)
 
 def run_libcreate_WF(nrthreads=2):
     freeze_support()
     pipeline_run([pepxml2spectrast], multiprocess=nrthreads)
+
+def run_libcreate_withNetMHC2_WF(nrthreads=2):
+    freeze_support()
+    pipeline_run([runNetMHC2], multiprocess=nrthreads)
 

@@ -8,7 +8,6 @@ from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys, KeyHelp
 
 
-
 class Spectrast(WrappedApp):
     """
     Create raw text library with iRT correction and without DECOYS_ from pepxml
@@ -61,7 +60,13 @@ class Spectrast(WrappedApp):
         consensus = consensus_base + '.splib'
         info['SPLIB'] = consensus
 
-
+        #spectrast -cNSpecLib_celltype_allele_fdr_iRT -cICID-QTOF -cTReference_celltype_allele_fdr.txt -cP0.7 -c_IRTiRT.txt -c_IRR iprophet.pep.xml
+        #A consensus library was then generated:
+        #spectrast -cNSpecLib_cons_celltype_allele_fdr_iRT -cICID-QTOF -cAC SpecLib_celltype_allele_fdr_iRT.splib
+        #HLA-allele specific consensus libraries were merged:
+        #spectrast -cNSpecLib_cons_celltype_alleles_fdr_iRT -cJU -cAC SpecLib_celltype_allele1_fdr_iRT.splib SpecLib_celltype_allele2_fdr_iRT.splib SpecLib_celltype_allele3_fdr_iRT.splib SpecLib_celltype_allele4_fdr_iRT.splib
+        #spectrast2tsv.py -l 350,2000 -s b,y -x 1,2 -o 6 -n 6 -p 0.05 -d -e -w swaths.txt -k openswath -a SpecLib_cons_celltype_alleles_fdr_iRT_openswath.csv SpecLib_cons_celltype_alleles_fdr_iRT.sptxt
+        #ConvertTSVToTraML -in SpecLib_cons_celltype_alleles_fdr_iRT_openswath.csv -out SpecLib_cons_celltype_alleles_fdr_iRT.TraML
 
         command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cN{rtcalib_base} {peplink}".format(
             exe = os.path.join(info['TPPDIR'], 'spectrast'),
