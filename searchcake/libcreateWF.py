@@ -17,7 +17,7 @@ from libcreate.spectrast import Spectrast
 from multiprocessing import freeze_support
 from systemhccake.netMHC import NetMHC
 from systemhccake.netMHC2 import NetMHC2
-
+from systemhccake.gibbscluster import GibbsCluster
 
 
 @files("input.ini", "jobid.ini")
@@ -100,8 +100,15 @@ def pepxml2spectrast(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile]
     Spectrast.main()
 
-################################ NETMHC #############################
+#################### GIBBS ########################################
 @follows(pepxml2spectrast)
+@files("convert2csv.ini", "Gibbs.ini")
+def runGIBBS(infile, outfile):
+    sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
+    GibbsCluster.main()
+
+################################ NETMHC #############################
+@follows(runGIBBS)
 @files("convert2csv.ini", "netMHC.ini")
 def runNetMHC(infile, outfile):
     sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]

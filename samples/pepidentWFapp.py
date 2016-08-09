@@ -51,7 +51,7 @@ def processAllBatches(files):
     for sample in df["SampleID"].unique():
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<".format(sample)
         print "\n\n\n\n"
-        processByBatch(files,sample , df)
+        processByBatch(files, sample, df)
 
 
 if __name__ == '__main__':
