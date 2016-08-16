@@ -18,7 +18,7 @@ from multiprocessing import freeze_support
 from systemhccake.netMHC import NetMHC
 from systemhccake.netMHC2 import NetMHC2
 from systemhccake.gibbscluster import GibbsCluster
-from systemhccake.gibbscluster import GibbsCluster2
+from systemhccake.gibbsclusterNetMHC import GibbsClusterNETHMC
 
 
 @files("input.ini", "jobid.ini")
@@ -109,7 +109,7 @@ def runGIBBS(infile, outfile):
     GibbsCluster.main()
 
 ################################ NETMHC #############################
-@follows(runGIBBS)
+@follows(pepxml2spectrast)
 @files("convert2csv.ini", "netMHC.ini")
 def runNetMHC(infile, outfile):
     sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
@@ -117,11 +117,10 @@ def runNetMHC(infile, outfile):
 
 ################################ NETMHC #############################
 @follows(runNetMHC)
-@files("convert2csv.ini", "netMHC.ini")
-def runGIBBS2(infile, outfile):
+@files("netMHC.ini", "gibbsNetMHC.ini")
+def runGIBBSNETMHC(infile, outfile):
     sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
-    GibbsCluster2.main()
-
+    GibbsClusterNETHMC.main()
 
 
 
@@ -131,9 +130,9 @@ def runNetMHC2(infile, outfile):
     sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
     NetMHC2.main()
 
-def run_libcreate_withNetMHC_WF(nrthreads=2):
+def run_libcreate_withNetMHC_WF(nrthreads=3):
     freeze_support()
-    pipeline_run([runGIBBS2], multiprocess=nrthreads)
+    pipeline_run([runGIBBSNETMHC], multiprocess=nrthreads)
 
 def run_libcreate_WF(nrthreads=2):
     freeze_support()
