@@ -30,10 +30,11 @@ class Spectrast(WrappedApp):
             Argument(Keys.PEPXML, KeyHelp.PEPXML),
             Argument(Keys.MZXML, KeyHelp.MZXML),
             Argument('TPPDIR','tpp directory', default=''),
-            Argument('MS_TYPE', 'ms instrument type',default="CID-QTOF"),
+            Argument('MS_TYPE', 'ms instrument type', default="CID-QTOF"),
             Argument('CONSENSUS_TYPE', 'consensus type : consensus/best replicate',default='consensus'),
             Argument('DECOY', 'Decoy pattern', default='DECOY_'),
-            Argument('IPROB', 'Probability to include', default ='0.8')
+            Argument('IPROB', 'Probability to include', default ='0.8'),
+            Argument('SPECTRASTDIR', 'spectrast utility directory', default='')
         ]
 
     def prepare_run(self, log, info):
@@ -83,7 +84,12 @@ class Spectrast(WrappedApp):
             consensustype = consensustype,
             output_name = consensus_base,
             consensus_base = worksplib)
-        return info, [command1, command2]
+
+        lib2html_command = "{exe} {lib}".format(exe = os.path.join(info['SPECTRASTDIR'], 'Lib2HTML'), lib=consensus_base + ".splib")
+        html2tsv = "python {exe} --input_file {consensus}.html --output_file consensus.tsvh".format(exe = os.path.join(info['SPECTRASTDIR'], 'spectrast_html_lib_2_csv.py'),
+                                                                                                   consensus=consensus_base)
+        rmconsesus = "rm {consensus}.html".format(consensus=consensus_base)
+        return info, [command1, command2, lib2html_command, html2tsv, rmconsesus]
 
 
     def validate_run(self, log, info, exit_code, stdout):
@@ -97,5 +103,5 @@ class Spectrast(WrappedApp):
 
 
 if __name__ == "__main__":
-    sys.argv = ['--INPUT', '/home/systemhc/prog/searchcake2/samples/spectrastExample.ini', '--OUTPUT', 'kufc.ini']
+    sys.argv = ['--INPUT', '/mnt/Systemhc/Data/process2/datasetiprophet.ini', '--OUTPUT', 'kufc.ini']
     Spectrast.main()

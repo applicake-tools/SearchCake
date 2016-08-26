@@ -37,6 +37,7 @@ MYRIMATCH_DIR={systemhc}/searchcake_binaries/MyriMatch/linux/linux_64bit
 MYRIMATCH_EXE=myrimatch
 
 TPPDIR={systemhc}/searchcake_binaries/tpp/ubuntu14.04/bin/
+SPECTRASTDIR={systemhc}/SysteMHC_Binaries/spectraST/
 '''.format(systemhc=os.environ.get('SYSTEMHC'))
 
 
