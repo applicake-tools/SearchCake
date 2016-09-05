@@ -12,7 +12,7 @@ import os
 from applicake.base.app import BasicApp
 from applicake.base.coreutils.arguments import Argument
 from applicake.base.coreutils.keys import Keys, KeyHelp
-
+from prophets.ParsePepXMLProbablities import parsePepXMLProbToErroMapping
 
 class IprohetPepXML2CSV(BasicApp):
     def add_args(self):
@@ -21,6 +21,7 @@ class IprohetPepXML2CSV(BasicApp):
             Argument(Keys.PEPXML, Keys.PEPXML),
         ]
 
+
     def run(self, log, info):
         """
         After ProteinQuantifier puts abundances from consensusXML to csv,
@@ -28,10 +29,12 @@ class IprohetPepXML2CSV(BasicApp):
         """
         # correct csv with right header
         pepxml_in = info[Keys.PEPXML]
-        info['PEPCSV'] = os.path.join(info[Keys.WORKDIR], "ipeptide.csv")
+        info['PEPCSV'] = os.path.join(info[Keys.WORKDIR], "ipeptide.tsvh")
+        info['PEPCSVERROR'] = os.path.join(info[Keys.WORKDIR], "error.tsvh")
+
         csv_out = info['PEPCSV']
         self.iprophetpepxml_csv(pepxml_in, csv_out)
-
+        parsePepXMLProbToErroMapping(pepxml_in, info['PEPCSVERROR'] )
         return info
 
     @staticmethod
@@ -45,40 +48,48 @@ class IprohetPepXML2CSV(BasicApp):
         reader = pepxml.read(infile)
         f = open(outfile, 'wb')
         writer = csv.writer(f, delimiter='\t')
-
         # modifications_example = [{'position': 20, 'mass': 160.0306}]
 
         header_set = False
 
+        nr_rows = 0
         result = {}
         for hit in reader:
-            if not 'search_hit' in hit:
-                continue
-            # result = hit
-            result['retention_time_sec'] = hit['retention_time_sec']
-            result['assumed_charge'] = hit['assumed_charge']
-            result['spectrum'] = hit['spectrum']
-            result['nrhit'] = len(hit['search_hit'])
-            search_hit = hit['search_hit'][0]
+            if 'error_point' in hit:
+                print (hit)
 
-            result['modified_peptide'] = search_hit['modified_peptide']
-            result['search_hit'] = search_hit['peptide']
-            analysis_result = search_hit['analysis_result'][1]
-            iprophet_probability = analysis_result['interprophet_result']['probability']
-            result['iprophet_probability'] = iprophet_probability
-            result['protein_id'] = search_hit['proteins'][0]['protein']
-            result['nrproteins'] = len(search_hit['proteins'])
-            if not header_set:
-                writer.writerow(result.keys())
-                header_set = True
-            writer.writerow(result.values())
+            if 'search_hit' in hit:
+                #continue
+                #else :
+                # result = hit
+                nr_rows +=1
+                result['retention_time_sec'] = hit['retention_time_sec']
+                result['assumed_charge'] = hit['assumed_charge']
+                result['spectrum'] = hit['spectrum']
+                result['nrhit'] = len(hit['search_hit'])
+                search_hit = hit['search_hit'][0]
+
+                result['modified_peptide'] = search_hit['modified_peptide']
+                result['search_hit'] = search_hit['peptide']
+                analysis_result = search_hit['analysis_result'][1]
+                iprophet_probability = analysis_result['interprophet_result']['probability']
+                result['iprophet_probability'] = iprophet_probability
+                result['protein_id'] = search_hit['proteins'][0]['protein']
+                result['nrproteins'] = len(search_hit['proteins'])
+                if not header_set:
+                    writer.writerow(result.keys())
+                    header_set = True
+                writer.writerow(result.values())
+        print(nr_rows)
         f.close()
 
 
 if __name__ == "__main__":
-    infile = sys.argv[1]
-    outfile = sys.argv[2]
-    IprohetPepXML2CSV.iprophetpepxml_csv(infile, outfile)
+    infile = "/mnt/Systemhc/Data/process2/marcillam_160207_marcilla_Spain_C1R_1/InterProphet/iprophet.pep.xml"#sys.argv[1]
+    outfile = "dummm.csv"#sys.argv[2]
+    sys.argv = ['--INPUT', '/mnt/Systemhc/Data/process/datasetiprophet.ini', '--OUTPUT', 'test.ini']
+    IprohetPepXML2CSV.main()
+    #IprohetPepXML2CSV.iprophetpepxml_csv(infile, outfile)
 
 
 
