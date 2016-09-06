@@ -61,14 +61,6 @@ class Spectrast(WrappedApp):
         consensus = consensus_base + '.splib'
         info['SPLIB'] = consensus
 
-        #spectrast -cNSpecLib_celltype_allele_fdr_iRT -cICID-QTOF -cTReference_celltype_allele_fdr.txt -cP0.7 -c_IRTiRT.txt -c_IRR iprophet.pep.xml
-        #A consensus library was then generated:
-        #spectrast -cNSpecLib_cons_celltype_allele_fdr_iRT -cICID-QTOF -cAC SpecLib_celltype_allele_fdr_iRT.splib
-        #HLA-allele specific consensus libraries were merged:
-        #spectrast -cNSpecLib_cons_celltype_alleles_fdr_iRT -cJU -cAC SpecLib_celltype_allele1_fdr_iRT.splib SpecLib_celltype_allele2_fdr_iRT.splib SpecLib_celltype_allele3_fdr_iRT.splib SpecLib_celltype_allele4_fdr_iRT.splib
-        #spectrast2tsv.py -l 350,2000 -s b,y -x 1,2 -o 6 -n 6 -p 0.05 -d -e -w swaths.txt -k openswath -a SpecLib_cons_celltype_alleles_fdr_iRT_openswath.csv SpecLib_cons_celltype_alleles_fdr_iRT.sptxt
-        #ConvertTSVToTraML -in SpecLib_cons_celltype_alleles_fdr_iRT_openswath.csv -out SpecLib_cons_celltype_alleles_fdr_iRT.TraML
-
         command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cN{rtcalib_base} {peplink}".format(
             exe = os.path.join(info['TPPDIR'], 'spectrast'),
             slog = info['SPLOG'],
@@ -86,8 +78,8 @@ class Spectrast(WrappedApp):
             consensus_base = worksplib)
 
         lib2html_command = "{exe} {lib}".format(exe = os.path.join(info['SPECTRASTDIR'], 'Lib2HTML'), lib=consensus_base + ".splib")
-        html2tsv = "python {exe} --input_file {consensus}.html --output_file consensus.tsvh".format(exe = os.path.join(info['SPECTRASTDIR'], 'spectrast_html_lib_2_csv.py'),
-                                                                                                   consensus=consensus_base)
+        html2tsv = "python {exe} --input_file {consensus}.html --output_file {consensus_out}.tsvh".format(exe = os.path.join(info['SPECTRASTDIR'], 'spectrast_html_lib_2_csv.py'),
+                                                                                                   consensus=consensus_base, consensus_out=consensus_base)
         rmconsesus = "rm {consensus}.html".format(consensus=consensus_base)
         return info, [command1, command2, lib2html_command, html2tsv, rmconsesus]
 
