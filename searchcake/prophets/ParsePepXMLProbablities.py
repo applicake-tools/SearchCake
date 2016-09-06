@@ -6,7 +6,7 @@ import csv
 def parsePepXMLProbToErroMapping(file,outfile):
     header_set = False
     f = open(outfile, 'wb')
-    writer = csv.writer(f, delimiter='\t')
+    writer = csv.writer(f, delimiter='\t', lineterminator="\n")
     for event, elem in etree.iterparse(file):
 
         if event == 'end' and re.search("error_point$", elem.tag):
