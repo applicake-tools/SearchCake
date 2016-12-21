@@ -71,7 +71,7 @@ _enzymes = {
         'InteractParser': ['semitrypsin', None],
     },
     'Nonspecific': {
-        'XTandem': ['[X]|[X]', 'no'],
+        'XTandem': ['[X]|[X]', 'nonspecific'],
         'Myrimatch': ['Trypsin/P', '0'],
         'Comet': ['0', ''],
         'Omssa': ['17', None],

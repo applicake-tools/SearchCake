@@ -40,7 +40,6 @@ def myri(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--THREADS', '4']
     Myrimatch.main()
 
-
 @transform(myri, regex("rawmyri.ini_"), "myrimatch.ini_")
 def peppromyri(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--NAME', 'pepmyri']
@@ -73,7 +72,8 @@ def pepprocomet(infile, outfile):
 
 
 ############################# TAIL: PARAMGENERATE ##################
-@merge([pepprocomet], "ecollate.ini")
+#pepprocomet,peppromyri,pepprocomet
+@merge([pepprotandem], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
     sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
     Merge.main()

@@ -6,4 +6,4 @@ build/
 dist/
 *.swp
 *.sqlite
-
+samples/worker/*

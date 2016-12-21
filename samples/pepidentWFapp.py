@@ -6,7 +6,6 @@ import pandas as pd
 import pepidentWFconfig as pwconf
 
 
-
 def run(files, alleles, workDir):
     pwconf.remove_ini_log()
     tmp = pwconf.setup_general() + pwconf.setup_search()
@@ -46,8 +45,6 @@ def processAllBatches(files):
     path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(
         os.environ.get('SYSTEMHC'))
     df = pd.read_csv(path)
-    #processByBatch(files,"Kowalewskid_160207_Rammensee_Germany_PBMC_Buffy83" , df)
-    #return 0
     for sample in df["SampleID"].unique():
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<".format(sample)
         print "\n\n\n\n"

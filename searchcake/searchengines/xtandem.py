@@ -7,7 +7,7 @@ from modifications import genmodstr_to_engine
 
 from applicake.base.apputils import templates
 from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys
+from applicake.base.coreutils.keys import Keys, KeyHelp
 from applicake.base.apputils import validation
 
 
@@ -21,13 +21,14 @@ class Xtandem(SearchEnginesBase):
         args.append(Argument('TPPDIR','Path to the tpp', default=''))
         args.append(Argument('TANDEM_EXE',KeyHelp.EXECUTABLE,default='tandem'))
         
-        args.append(Argument('TANDEM2XML_EXE',KeyHelp.EXECUTABLE,default='TandeAm2XML'))
+        args.append(Argument('TANDEM2XML_EXE',KeyHelp.EXECUTABLE,default='Tandem2XML'))
         args.append(Argument('XTANDEM_SCORE', 'Scoring algorithm used in the search.'))
         return args
 
     def prepare_run(self, log, info):
         wd = info[Keys.WORKDIR]
-        exe = info.get('TANDEM_EXE')
+        tandemexe = info.get('TANDEM_EXE')
+        tandem2xmlexe = info.get('TANDEM2XML_EXE')
 
         # need to create a working copy to prevent replacement with app specific definitions
         app_info = info.copy()
@@ -36,13 +37,11 @@ class Xtandem(SearchEnginesBase):
         
         app_info["STATIC_MODS"],
         app_info["VARIABLE_MODS"],
-        app_info['TERMINAL_MODS'] = genmodstr_to_engine(info["STATIC_MODS"],
-            info["VARIABLE_MODS"],
-             'XTandem')
-        
-        app_info['ENZYME'],
-        app_info['XTANDEM_SEMI_CLEAVAGE'] = enzymestr_to_engine(info['ENZYME'], 'XTandem')
+        app_info['TERMINAL_MODS'] = genmodstr_to_engine(info["STATIC_MODS"],info["VARIABLE_MODS"],'XTandem')
+        cleavage, enzyme   = enzymestr_to_engine(info['ENZYME'], 'XTandem')
 
+        app_info['ENZYME'] =cleavage
+        app_info['XTANDEM_SEMI_CLEAVAGE'] = enzyme
         #files required and written
         app_info['XTANDEM_PARAMS'] = os.path.join(wd, 'xtandem.params')
         templates.read_mod_write(app_info, templates.get_tpl_of_class(self), app_info['XTANDEM_PARAMS'])
@@ -55,9 +54,9 @@ class Xtandem(SearchEnginesBase):
         info[Keys.PEPXML] = os.path.join(wd, 'xtandem.pep.xml')
         command = []
         tpp_dir = info['TPPDIR']
-        command.append("{exe} {tandeminput}".foramt(exe=os.path.join(tpp_dir,exe),tandeminput=app_info['XTANDEM_INPUT']))
+        command.append("{exe} {tandeminput}".format(exe=os.path.join(tpp_dir,tandemexe),tandeminput=app_info['XTANDEM_INPUT']))
 
-        command.append('Tandem2XML {tandemresult} {pepxml} '.format(
+        command.append('{exe} {tandemresult} {pepxml} '.format(exe = os.path.join(tpp_dir,tandem2xmlexe),
             tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML]))
         return info, command
 
