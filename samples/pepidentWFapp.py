@@ -29,17 +29,17 @@ def processByBatch(allMzXMLs, sample, df):
     import ntpath
     tmp = df[df["SampleID"] == sample]
     filesIds = tmp['FileName']
-    res = list()
+    files = list()
     for i in filesIds:
-        res  += [x for x in allMzXMLs if ntpath.basename(x) == i]
-    if(len(res)==0):
+        files  += [x for x in allMzXMLs if ntpath.basename(x) == i]
+    if(len(files)==0):
         print("no files for sample" + sample)
         return 1
     alleles = tmp['MHCAllele'].unique().tolist()
     if len(alleles) != 1:
         print "There are more than one allele set for this sample : {}".format(";".join(alleles))
     alleles = alleles[0].split(",")
-    run(res, alleles, sample)
+    run(files, alleles, sample)
 
 def processAllBatches(files):
     path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(

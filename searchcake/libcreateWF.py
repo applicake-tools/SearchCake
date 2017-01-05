@@ -73,9 +73,9 @@ def pepprocomet(infile, outfile):
 
 ############################# TAIL: PARAMGENERATE ##################
 #pepprocomet,peppromyri,pepprocomet
-@merge([pepprotandem], "ecollate.ini")
+@merge([pepprocomet, peppromyri], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
-    sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
+    sys.argv = ['--MERGE', 'tandem.ini', '--MERGED', outfile]
     Merge.main()
 
 ############################## RunProphets #########################
