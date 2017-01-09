@@ -29,6 +29,7 @@ def processByBatch(allMzXMLs, sample, df):
     import ntpath
     tmp = df[df["SampleID"] == sample]
     filesIds = tmp['FileName']
+#    print " ".format(filesIds)
     files = list()
     for i in filesIds:
         files  += [x for x in allMzXMLs if ntpath.basename(x) == i]
@@ -57,7 +58,10 @@ if __name__ == '__main__':
     if res == None:
         print "SYSTEMHC not set"
         exit(1)
-    files = pwconf.getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
+    #files = pwconf.getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
+    #processAllBatches(files)
+    files = pwconf.getMzXMLFiles("/mnt/Systemhc/wshao/test_1/data/")
+     #   print files
     processAllBatches(files)
     #run(files, "dummydir" + str(random.randint(1000,9999)))
 
