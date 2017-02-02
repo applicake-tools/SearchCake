@@ -33,7 +33,8 @@ class Spectrast(WrappedApp):
             Argument('MS_TYPE', 'ms instrument type', default="CID-QTOF"),
             Argument('CONSENSUS_TYPE', 'consensus type : consensus/best replicate',default='consensus'),
             Argument('DECOY', 'Decoy pattern', default='DECOY_'),
-            Argument('IPROB', 'Probability to include', default ='0.8'),
+            Argument('IPROB', 'Probability to include. Wenguang: it was turned off. Instead, using FDR', default ='0.0001'),
+            Argument('FDR', 'FDR cut. Wenguang: replace with IPROB', default='0.01'),
             Argument('SPECTRASTDIR', 'spectrast utility directory', default='')
         ]
 
@@ -61,12 +62,13 @@ class Spectrast(WrappedApp):
         consensus = consensus_base + '.splib'
         info['SPLIB'] = consensus
 
-        command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cN{rtcalib_base} {peplink}".format(
+        command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cq{fdr} -cN{rtcalib_base} {peplink}".format(
             exe = os.path.join(info['TPPDIR'], 'spectrast'),
             slog = info['SPLOG'],
             decoy = info['DECOY'],
             mstype = info['MS_TYPE'],
             iprob = info['IPROB'],
+            fdr = info['FDR'],
             rtcalib_base = worksplib_base,
             peplink = pepxml)
 

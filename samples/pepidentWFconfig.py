@@ -48,8 +48,30 @@ COMMENT = bbWFTEST - newUPS TPP
 """
 
 
-def setup_search():
-    return '''
+def setup_search(massspec):
+    if massspec in {'Triple-TOF 5600', 'Q-Exactive', 'Q-Exactive Plus', 'Q-Exactive HF', 'Orbitrap Fusion'}:
+        return '''
+ # Search parameters
+FDR_TYPE = iprophet-pepFDR
+FRAGMASSERR = 0.05
+FRAGMASSUNIT = Da
+PRECMASSERR = 15
+PRECMASSUNIT = ppm
+MISSEDCLEAVAGE = 0
+ENZYME = Nonspecific
+STATIC_MODS =
+VARIABLE_MODS = Oxidation (M)
+comet_fragment_bin_offset = 0.0
+comet_theoretical_fragment_ions = 0
+
+## TPP
+DECOY = DECOY_
+IPROPHET_ARGS = MINPROB=0
+MZXML =
+DBASE =
+    '''
+    else:
+        return '''
  # Search parameters
 FDR_TYPE = iprophet-pepFDR
 FRAGMASSERR = 0.5
@@ -60,6 +82,8 @@ MISSEDCLEAVAGE = 0
 ENZYME = Nonspecific
 STATIC_MODS =
 VARIABLE_MODS = Oxidation (M)
+comet_fragment_bin_offset = 0.4
+comet_theoretical_fragment_ions = 1
 
 ## TPP
 DECOY = DECOY_
@@ -67,7 +91,6 @@ IPROPHET_ARGS = MINPROB=0
 MZXML =
 DBASE =
     '''
-
 
 
 def getTuberculosisData():
@@ -98,8 +121,14 @@ def getMZXMLTub3():
             'PBMC11_Tubingen_130510_SKUG_Buffy85_W_2p00ug_20_Rep_5_msms10_c.mzXML']
 
 
-def getDB():
-    return '{systemhc}/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'.format(systemhc=os.environ.get('SYSTEMHC'))
+def getDB(organism):
+    if(organism == "Human"):
+        return '{systemhc}/SysteMHC_Data/fasta/CNCL_05640_2015_09_DECOY.fasta'.format(systemhc=os.environ.get('SYSTEMHC'))
+    elif(organism == "Mycobacterium tuberculosis"):
+        return '{systemhc}/SysteMHC_Data/fasta/carone_hsp_MtbII_DECOY_141017.fasta'.format(systemhc=os.environ.get('SYSTEMHC'))
+    else:
+        return '{systemhc}/SysteMHC_Data/fasta/mtb_plus_human_DECOY.fasta'.format(systemhc=os.environ.get('SYSTEMHC'))
+
 
 def getTubercoDB():
     return '{systemhc}/SysteMHC_Data/fasta/mycBovis.fasta'.format(systemhc=os.environ.get('SYSTEMHC'))

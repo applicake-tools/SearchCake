@@ -58,10 +58,12 @@ class IprohetPepXML2CSV(BasicApp):
             if 'error_point' in hit:
                 print (hit)
 
-            if 'search_hit' in hit:
+#wenguang: remove all decoy hits!
+            if 'search_hit' in hit and hit['search_hit'][0]['proteins'][0]['protein'].find("DECOY") == -1:
                 #continue
                 #else :
-                # result = hit
+                # result = hit#
+                #print(hit['search_hit'][0]['proteins'][0]['protein'])
                 nr_rows +=1
                 result['retention_time_sec'] = hit['retention_time_sec']
                 result['assumed_charge'] = hit['assumed_charge']
@@ -85,9 +87,9 @@ class IprohetPepXML2CSV(BasicApp):
 
 
 if __name__ == "__main__":
-    infile = "/mnt/Systemhc/Data/process2/marcillam_160207_marcilla_Spain_C1R_1/InterProphet/iprophet.pep.xml"#sys.argv[1]
+    infile = "/mnt/Systemhc/wshao/test_2/search/Kowalewskid_160207_Rammensee_Germany_PBMC_Buffy18/InterProphet/iprophet.pep.xml"#sys.argv[1]
     outfile = "dummm.csv"#sys.argv[2]
-    sys.argv = ['--INPUT', '/mnt/Systemhc/Data/process/datasetiprophet.ini', '--OUTPUT', 'test.ini']
+    sys.argv = ['--INPUT', '/mnt/Systemhc/wshao/test_2/search/datasetiprophet.ini', '--OUTPUT', 'test.ini']
     IprohetPepXML2CSV.main()
     #IprohetPepXML2CSV.iprophetpepxml_csv(infile, outfile)
 

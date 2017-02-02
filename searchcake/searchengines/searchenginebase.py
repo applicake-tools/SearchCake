@@ -21,5 +21,8 @@ class SearchEnginesBase(WrappedApp):
             Argument('STATIC_MODS', 'List of static modifications',default='Carbamidomethyl (C)'),
             Argument('VARIABLE_MODS', 'List of variable modifications'),
 
+            Argument('comet_fragment_bin_offset', 'wenguang added temp', default=0.4),
+            Argument('comet_theoretical_fragment_ions', 'wenguang added temp', default=1),
+
             Argument('DBASE', 'Sequence database file with target/decoy entries'),
         ]

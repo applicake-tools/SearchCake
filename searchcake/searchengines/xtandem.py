@@ -57,7 +57,7 @@ class Xtandem(SearchEnginesBase):
         command.append("{exe} {tandeminput}".format(exe=os.path.join(tpp_dir,tandemexe),tandeminput=app_info['XTANDEM_INPUT']))
 
         command.append('{exe} {tandemresult} {pepxml} '.format(exe = os.path.join(tpp_dir,tandem2xmlexe),
-            tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML]))
+           tandemresult=app_info['XTANDEM_RESULT'],pepxml=info[Keys.PEPXML]))
         return info, command
 
     @staticmethod

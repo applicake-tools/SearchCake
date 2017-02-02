@@ -73,9 +73,13 @@ def pepprocomet(infile, outfile):
 
 ############################# TAIL: PARAMGENERATE ##################
 #pepprocomet,peppromyri,pepprocomet
-@merge([pepprocomet, peppromyri], "ecollate.ini")
+#@merge([pepprocomet, peppromyri], "ecollate.ini")
+@merge([pepprocomet, pepprotandem], "ecollate.ini")
+#@merge([peppromyri], "ecollate.ini")
+#@merge([pepprocomet,peppromyri], "ecollate.ini")
 def merge_datasets(unused_infiles, outfile):
-    sys.argv = ['--MERGE', 'tandem.ini', '--MERGED', outfile]
+    sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
+    #sys.argv = ['--MERGE', 'myrimatch.ini', '--MERGED', outfile]
     Merge.main()
 
 ############################## RunProphets #########################
@@ -132,7 +136,8 @@ def runNetMHC2(infile, outfile):
 
 def run_libcreate_withNetMHC_WF(nrthreads=3):
     freeze_support()
-    pipeline_run([runGIBBSNETMHC], multiprocess=nrthreads)
+    #pipeline_run([runGIBBSNETMHC], multiprocess=nrthreads)
+    pipeline_run([runNetMHC], multiprocess=nrthreads)
 
 def run_libcreate_WF(nrthreads=2):
     freeze_support()

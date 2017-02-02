@@ -55,6 +55,7 @@ class Comet(SearchEnginesBase):
         exe = app_info['COMET_EXE']
 
         command = "{exe} -N{basename} -P{tplfile} {mzxml}".format(exe=os.path.join(exe_path, exe), basename=basename, tplfile=tplfile, mzxml=info[Keys.MZXML])
+        #command = []
         return info, command
 
     def validate_run(self, log, info, exit_code, stdout):

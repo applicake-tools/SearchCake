@@ -40,8 +40,8 @@ require_variable_mod = 0
 # high res ms/ms:    0.02 tolerance, 0.0 offset (mono masses), theoretical_fragment_ions = 0
 #
 fragment_bin_tol = $FRAGMASSERR              # binning to use on fragment ions
-fragment_bin_offset = 0.4              # offset position to start the binning (0.0 to 1.0)
-theoretical_fragment_ions = 1          # 0=use flanking peaks, 1=M peak only
+fragment_bin_offset = $comet_fragment_bin_offset              # offset position to start the binning (0.0 to 1.0)
+theoretical_fragment_ions = $comet_theoretical_fragment_ions          # 0=use flanking peaks, 1=M peak only
 use_A_ions = 0
 use_B_ions = 1
 use_C_ions = 0
@@ -85,7 +85,7 @@ max_fragment_charge = 3                # set maximum fragment charge state to an
 max_precursor_charge = 6               # set maximum precursor charge state to analyze (allowed max 9)
 nucleotide_reading_frame = 0           # 0=proteinDB, 1-6, 7=forward three, 8=reverse three, 9=all six
 clip_nterm_methionine = 0              # 0=leave sequences as-is; 1=also consider sequence w/o N-term methionine
-spectrum_batch_size = 0                # max. # of spectra to search at a time; 0 to search the entire scan range in one loop
+spectrum_batch_size = 10000                # max. # of spectra to search at a time; 0 to search the entire scan range in one loop
 decoy_prefix = DECOY_                  # decoy entries are denoted by this string which is pre-pended to each protein accession
 output_suffix =                        # add a suffix to output base names i.e. suffix "-C" generates base-C.pep.xml from base.mzXML input
 mass_offsets =                         # one or more mass offsets to search (values substracted from deconvoluted precursor mass)
