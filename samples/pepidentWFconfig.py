@@ -1,7 +1,7 @@
 import os
 import glob
-from applicake.base import get_handler
-from applicake.base.apputils import dicts
+from applicake2.base import get_handler
+from applicake2.base.apputils import dicts
 
 
 

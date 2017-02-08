@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="searchcake2",
+    name="searchcake",
     version="0.0.5",
     author=["Lorenz Blum", "Witold Wolski"],
     maintainer=['Lorenz Blum', 'Witold Wolski'],
@@ -11,5 +11,5 @@ setup(
     license="BSD",
     packages=find_packages(),
     url='https://github.com/applicake-tools/searchcake',
-    install_requires=['Unimod','applicake', 'pyteomics', 'ruffus', 'configobj']
+    install_requires=['Unimod', 'applicake2', 'pyteomics', 'ruffus', 'configobj']
 )

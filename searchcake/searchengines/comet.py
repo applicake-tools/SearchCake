@@ -3,10 +3,10 @@ import os
 
 from enzymes import enzymestr_to_engine
 from modifications import genmodstr_to_engine
-from applicake.base.apputils.templates import read_mod_write, get_tpl_of_class
-from applicake.base.apputils.validation import check_exitcode, check_xml, check_stdout
-from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys
+from applicake2.base.apputils.templates import read_mod_write, get_tpl_of_class
+from applicake2.base.apputils.validation import check_exitcode, check_xml, check_stdout
+from applicake2.base.coreutils.arguments import Argument
+from applicake2.base.coreutils.keys import Keys
 from searchenginebase import SearchEnginesBase
 
 

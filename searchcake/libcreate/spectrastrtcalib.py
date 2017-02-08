@@ -2,11 +2,11 @@
 import os
 import re
 
-from fdr import get_iprob_for_fdr
-from applicake.base.app import WrappedApp
-from applicake.base.apputils import validation
-from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys, KeyHelp
+from searchcake.utils.fdr import get_iprob_for_fdr
+from applicake2.base.app import WrappedApp
+from applicake2.base.apputils import validation
+from applicake2.base.coreutils.arguments import Argument
+from applicake2.base.coreutils.keys import Keys, KeyHelp
 
 
 class SpectrastRTcalib(WrappedApp):
@@ -19,7 +19,7 @@ class SpectrastRTcalib(WrappedApp):
             Argument(Keys.MZXML, KeyHelp.MZXML),
 
             Argument(Keys.PEPXML, KeyHelp.PEPXML),
-            Argument('TPPDIR','tpp directory', default='')
+            Argument('TPPDIR','tpp directory', default=''),
             Argument('MAYUOUT', 'mayu out csv'),
             Argument('FDR_TYPE', "type of FDR: iprophet/mayu m/pep/protFDR",default='iprophet'),
             Argument("FDR_CUTOFF", "cutoff for FDR",default=0.1),
