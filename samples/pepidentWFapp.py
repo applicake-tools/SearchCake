@@ -66,7 +66,7 @@ def processByBatch(allMzXMLs, sample, df):
 def processAllBatches(files):
     #path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(os.environ.get('SYSTEMHC'))
     #path = "/mnt/Systemhc/Data/data_annotation.csvh"
-    path = "/mnt/Systemhc/Data/data_annotation_20170201.csv"
+    path = "/mnt/Systemhc/Data/data_annotation_20170213.csv"
     df = pd.read_csv(path)
     for sample in df["SampleID"].unique():
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<".format(sample)
@@ -83,7 +83,8 @@ if __name__ == '__main__':
     #files = pwconf.getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
     #processAllBatches(files)
     #files = pwconf.getMzXMLFiles("/mnt/Systemhc/wshao/test_systemhc_00002/data/")
-    files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00010/")
+    files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00001/")
+    #files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00006/analysis/temp/")
     #files = pwconf.getMzXMLFiles("/mnt/Systemhc/wshao/test_2/data/")
      #   print files
     processAllBatches(files)

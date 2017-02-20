@@ -77,9 +77,10 @@ def pepprocomet(infile, outfile):
 @merge([pepprocomet, pepprotandem], "ecollate.ini")
 #@merge([peppromyri], "ecollate.ini")
 #@merge([pepprocomet,peppromyri], "ecollate.ini")
+#def merge_datasets(unused_infiles, outfile):
 def merge_datasets(unused_infiles, outfile):
+    #sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
     sys.argv = ['--MERGE', 'comet.ini', '--MERGED', outfile]
-    #sys.argv = ['--MERGE', 'myrimatch.ini', '--MERGED', outfile]
     Merge.main()
 
 ############################## RunProphets #########################

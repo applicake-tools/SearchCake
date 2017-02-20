@@ -62,7 +62,8 @@ class Spectrast(WrappedApp):
         consensus = consensus_base + '.splib'
         info['SPLIB'] = consensus
 
-        command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cq{fdr} -cN{rtcalib_base} {peplink}".format(
+        #command1 = "{exe} -L{slog} -c_RDY{decoy} -cI{mstype} -cP{iprob} -cq{fdr} -cN{rtcalib_base} {peplink}".format(
+        command1="{exe} -L{slog} -c_RDY{decoy} -cP{iprob} -cq{fdr} -cN{rtcalib_base} {peplink}".format(
             exe = os.path.join(info['TPPDIR'], 'spectrast'),
             slog = info['SPLOG'],
             decoy = info['DECOY'],
