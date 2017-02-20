@@ -73,7 +73,6 @@ def pepprocomet(infile, outfile):
     sys.argv = ['--INPUT', infile, '--OUTPUT', outfile, '--NAME', 'pepcomet']
     PeptideProphetSequence.main()
 
-
 ############################# TAIL: PARAMGENERATE ##################################
 
 @merge([pepprocomet, peppromyri], "ecollate.ini")

@@ -16,7 +16,6 @@ from prophets.peptideprophet import PeptideProphetSequence
 from libcreate.spectrast import Spectrast
 from multiprocessing import freeze_support
 from systemhccake.netMHC import NetMHC
-from systemhccake.netMHC2 import NetMHC2
 from systemhccake.gibbscluster import GibbsCluster
 from systemhccake.gibbsclusterNetMHC import GibbsClusterNETHMC
 
@@ -73,8 +72,8 @@ def pepprocomet(infile, outfile):
 
 ############################# TAIL: PARAMGENERATE ##################
 #pepprocomet,peppromyri,pepprocomet
-#@merge([pepprocomet, peppromyri], "ecollate.ini")
-@merge([pepprocomet, pepprotandem], "ecollate.ini")
+@merge([pepprocomet], "ecollate.ini")
+#@merge([pepprocomet, pepprotandem], "ecollate.ini")
 #@merge([peppromyri], "ecollate.ini")
 #@merge([pepprocomet,peppromyri], "ecollate.ini")
 #def merge_datasets(unused_infiles, outfile):
@@ -129,12 +128,6 @@ def runGIBBSNETMHC(infile, outfile):
 
 
 
-@follows(pepxml2spectrast)
-@files("convert2csv.ini", "netMHC.ini")
-def runNetMHC2(infile, outfile):
-    sys.argv = ['--INPUT', infile, "--OUTPUT", outfile]
-    NetMHC2.main()
-
 def run_libcreate_withNetMHC_WF(nrthreads=3):
     freeze_support()
     #pipeline_run([runGIBBSNETMHC], multiprocess=nrthreads)
@@ -143,8 +136,3 @@ def run_libcreate_withNetMHC_WF(nrthreads=3):
 def run_libcreate_WF(nrthreads=2):
     freeze_support()
     pipeline_run([pepxml2spectrast], multiprocess=nrthreads)
-
-def run_libcreate_withNetMHC2_WF(nrthreads=2):
-    freeze_support()
-    pipeline_run([runNetMHC2], multiprocess=nrthreads)
-
