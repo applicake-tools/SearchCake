@@ -2,6 +2,7 @@ import os
 import platform
 import searchcake.libcreateWF as libcreateWF
 import pandas as pd
+import ntpath
 
 import pepidentWFconfig as pwconf
 
@@ -23,15 +24,13 @@ def run(files, alleles, organism, massspec, MHC_class, workDir):
                                         'ALLELE_LIST': alleles})
 
     if MHC_class == 'class I':
-        libcreateWF.run_libcreate_withNetMHC_WF(nrthreads= 4)
+        libcreateWF.run_libcreate_withNetMHC_WF(nrthreads=4)
     else:
         libcreateWF.run_libcreate_WF(nrthreads=4)
 
 
 def processByBatch(allMzXMLs, sample, df):
-    import ntpath
     tmp = df[df["SampleID"] == sample]
-    #filesIds = tmp['FileName']
     filesIds = tmp['ConvertedFileName']
 #    print " ".format(filesIds)
     files = list()
@@ -63,12 +62,16 @@ def processByBatch(allMzXMLs, sample, df):
 
     run(files, alleles, organism, massspec, MHC_class, sample)
 
-def processAllBatches(files):
-    #path = "{}/SysteMHC_Data/annotation/cleanedTable_id.csv".format(os.environ.get('SYSTEMHC'))
-    #path = "/mnt/Systemhc/Data/data_annotation.csvh"
+def process_all_batches(files):
     path = "/mnt/Systemhc/Data/data_annotation_20170201.csv"
     df = pd.read_csv(path)
+
+    cwd = os.getcwd()
     for sample in df["SampleID"].unique():
+        dir = "{}/{}".format(cwd, sample)
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        os.chdir(dir)
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>{}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<".format(sample)
         print "\n\n\n\n"
         processByBatch(files, sample, df)
@@ -80,15 +83,8 @@ if __name__ == '__main__':
     if res == None:
         print "SYSTEMHC not set"
         exit(1)
-    #files = pwconf.getMzXMLFiles("/mnt/Systemhc/Data/PXD001872/")
-    #processAllBatches(files)
-    #files = pwconf.getMzXMLFiles("/mnt/Systemhc/wshao/test_systemhc_00002/data/")
-    files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00010/")
-    #files = pwconf.getMzXMLFiles("/mnt/Systemhc/wshao/test_2/data/")
-     #   print files
-    processAllBatches(files)
-    #run(files, "dummydir" + str(random.randint(1000,9999)))
+    files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00001/")
+    process_all_batches(files)
 
 
 
-#pipeline_printout_graph ('flowchart.png','png',[copy2dropbox],no_key_legend = False) #svg

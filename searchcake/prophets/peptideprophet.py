@@ -13,6 +13,7 @@ class PeptideProphetSequence(WrappedApp):
     Corrects pepxml output to make compatible with TPP and openms, then executes xinteract
     (step by step because of semiTrypsin option)
     """
+
     def add_args(self):
         return [
             Argument(Keys.WORKDIR, KeyHelp.WORKDIR),
@@ -21,7 +22,7 @@ class PeptideProphetSequence(WrappedApp):
             Argument('DBASE', 'FASTA dbase'),
             Argument('MZXML', 'Path to the original MZXML inputfile'),
             Argument('DECOY', 'Decoy pattern', default='DECOY_'),
-            Argument('TPPDIR', 'Path to the tpp',  default='')
+            Argument('TPPDIR', 'Path to the tpp', default='')
         ]
 
     def prepare_run(self, log, info):
@@ -33,22 +34,24 @@ class PeptideProphetSequence(WrappedApp):
 
         # XTINERACT
         # TODO check if this is needed
-        #info['XINTERACT'] = '-dDECOY_ -OAPdlIw'
+        # info['XINTERACT'] = '-dDECOY_ -OAPdlIw'
         result = os.path.join(info[Keys.WORKDIR], 'interact.pep.xml')
         enz, _ = enzymestr_to_engine(info['ENZYME'], 'InteractParser')
 
         command = []
         tpp_dir = info['TPPDIR']
         command.append(
-            "{exe} {result} {pepxml} -E{enzyme}".format(exe=os.path.join(info['TPPDIR'],"InteractParser"),result=result,pepxml=info[Keys.PEPXML],enzyme=enz)
+            "{exe} {result} {pepxml} -E{enzyme}".format(exe=os.path.join(info['TPPDIR'], "InteractParser"),
+                                                        result=result, pepxml=info[Keys.PEPXML], enzyme=enz)
         )
         command.append(
             "{exe} {result} {database}".format(
-            exe=os.path.join(info['TPPDIR'],"RefreshParser"), result=result, pepxml=info[Keys.PEPXML],enzyme=enz,database=info['DBASE'])
+                exe=os.path.join(info['TPPDIR'], "RefreshParser"), result=result, pepxml=info[Keys.PEPXML], enzyme=enz,
+                database=info['DBASE'])
         )
         command.append(
             "{exe} {result} DECOY={decoy} ACCMASS NONPARAM DECOYPROBS LEAVE PI INSTRWARN".format(
-            exe = os.path.join(info['TPPDIR'],"PeptideProphetParser"), result=result, decoy=info['DECOY'])
+                exe=os.path.join(info['TPPDIR'], "PeptideProphetParser"), result=result, decoy=info['DECOY'])
         )
 
         info[Keys.PEPXML] = result
