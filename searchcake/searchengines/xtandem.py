@@ -5,10 +5,10 @@ from searchenginebase import SearchEnginesBase
 from enzymes import enzymestr_to_engine
 from modifications import genmodstr_to_engine
 
-from applicake.base.apputils import templates
-from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys, KeyHelp
-from applicake.base.apputils import validation
+from applicake2.base.apputils import templates
+from applicake2.base.coreutils.arguments import Argument
+from applicake2.base.coreutils.keys import Keys, KeyHelp
+from applicake2.base.apputils import validation
 
 
 class Xtandem(SearchEnginesBase):

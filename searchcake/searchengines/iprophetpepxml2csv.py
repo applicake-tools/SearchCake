@@ -9,10 +9,10 @@ from pyteomics import pepxml
 import csv
 import os
 
-from applicake.base.app import BasicApp
-from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys, KeyHelp
-from prophets.ParsePepXMLProbablities import parsePepXMLProbToErroMapping
+from applicake2.base.app import BasicApp
+from applicake2.base.coreutils.arguments import Argument
+from applicake2.base.coreutils.keys import Keys, KeyHelp
+from searchcake.prophets.ParsePepXMLProbablities import parsePepXMLProbToErroMapping
 
 class IprohetPepXML2CSV(BasicApp):
     def add_args(self):

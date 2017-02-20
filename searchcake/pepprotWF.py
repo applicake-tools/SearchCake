@@ -1,8 +1,8 @@
 import sys
 from ruffus import *
 
-from applicake.base import BasicApp
-from applicake.base.coreutils import IniInfoHandler
+from applicake2.base import BasicApp
+from applicake2.base.coreutils import IniInfoHandler
 from searchcake.pepidentWF import PepidentWF
 from searchcake.prophets.proteinprophet import ProteinProphet
 from multiprocessing import freeze_support

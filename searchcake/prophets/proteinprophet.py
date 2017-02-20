@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os
 
-from applicake.base.app import WrappedApp
-from applicake.base.apputils import validation
-from applicake.base.coreutils.arguments import Argument
-from applicake.base.coreutils.keys import Keys, KeyHelp
-from utils.fdr import get_iprob_for_fdr
+from applicake2.base.app import WrappedApp
+from applicake2.base.apputils import validation
+from applicake2.base.coreutils.arguments import Argument
+from applicake2.base.coreutils.keys import Keys, KeyHelp
+from searchcake.utils.fdr import get_iprob_for_fdr
 
 
 class ProteinProphet(WrappedApp):

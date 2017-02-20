@@ -4,9 +4,9 @@ import sys
 # identification workflow for systeMHC
 
 from ruffus import *
-from applicake.apps.flow.jobid import Jobid
-from applicake.apps.flow.merge import Merge
-from applicake.apps.flow.split import Split
+from applicake2.apps.flow.jobid import Jobid
+from applicake2.apps.flow.merge import Merge
+from applicake2.apps.flow.split import Split
 from searchengines.comet import Comet
 from searchengines.iprophetpepxml2csv import IprohetPepXML2CSV
 from searchengines.myrimatch import Myrimatch
