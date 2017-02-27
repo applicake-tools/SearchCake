@@ -83,10 +83,6 @@ if __name__ == '__main__':
     if res == None:
         print "SYSTEMHC not set"
         exit(1)
-<<<<<<< HEAD
-
-=======
->>>>>>> 011d231bc77d114b3eebab92760789fbbba5284f
     files = pwconf.getMzXMLFiles("/mnt/Systemhc/data/SYSMHC00001/")
     process_all_batches(files)
 
